@@ -163,7 +163,7 @@
         .box5.lock {
             opacity: 0.2;
             transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            transform: translateX(120px) translateY(200px) scale(1.3);
+            transform: translateX(100px) translateY(190px) scale(1.5);
         }
         .box6.lock {
             opacity: 0.2;
@@ -178,7 +178,7 @@
         .box8.lock {
             opacity: 0.2;
             transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            transform: translateX(-120px) translateY(200px) scale(1.3);
+            transform: translateX(-100px) translateY(190px) scale(1.5);
         }
         .box9.lock {
             opacity: 0.2;
@@ -1007,7 +1007,7 @@
             position: absolute;
             background: none;
             transform: scale(1);
-            transition: all 0.6s cubic-bezier(.07,1.33,1,1);
+            transition: all 1.5s cubic-bezier(.07,1.33,1,1);
             z-index: 3;
             scale: 1;
         }
@@ -1017,7 +1017,7 @@
         }
 
         .allApp.lock {
-            transition: all 1s cubic-bezier(.07,1.33,1,1);
+            transition: all 1.5s cubic-bezier(.07,1.33,1,1);
             transform: scale(2.3) rotateX(10deg);
             opacity: 0;
         }
@@ -1066,7 +1066,7 @@
 
     <div id="loading-screen">
     <div class="spinner"></div>
-    <p>Loading OriginOS...</p>
+    <p>Loading OriginOS V1.1.10</p>
     <p>by: Quandz24</p>
     <p>tiktok: @sungsamtech - @._naq.</p>
   </div>
@@ -1121,7 +1121,7 @@
                     </div>
                     <div class="khaysetting2">
                         <div class="left-text">Version</div>
-                        <div class="left-text-small">&nbsp;V1.1.00</div>
+                        <div class="left-text-small">&nbsp;V1.1.10</div>
                     </div>
                     <div class="originos"></div>
                 </div>
@@ -1454,13 +1454,14 @@
                     clearTimeout(autoHideClickablesTimer);
 
                     if (currentOpeningBtn) {
-                        Object.values(clickables).forEach((el) => {
-                            el.style.display = "block";
-                        });
-
                         currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(0.17, 0.84, 0.44, 1)";
                         currentOpeningBtn.classList.remove("open");
                         currentOpeningBtn.classList.remove("hien");
+
+                        Object.values(clickables).forEach((el) => {
+                            el.style.display = "block";
+                        });
+                        
 
                         app.classList.remove("open");
                         app = appopen[`box${num}`];
@@ -1470,7 +1471,6 @@
 
                         if (nav) nav.classList.remove("open");
 
-                        setTimeout(() => {
                             currentOpeningBtn.style.transform = `scale(1)`;
                             currentOpeningBtn.style.zIndex = "5";
 
@@ -1483,7 +1483,6 @@
                             autoHideClickablesTimer = setTimeout(() => {
                                 if (isMo) hideAllClickables();
                             }, 570);
-                        }, 0);
                     } else {
                         currentOpeningBtn = boxes[`box${num}`];
                         currentOpeningBtn.style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
@@ -1536,50 +1535,51 @@
 
             hideAllClickables();
             clock.classList.remove("hien");
+            document.querySelector(".khayapp").classList.add("lock");
 
             boxes["box1"].style.transform = "translateX(-40px) translateY(250px) scale(1.4)";
             boxes["box1"].style.opacity = "0.2";
-            boxes["box1"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box1"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box2"].style.transform = "translateX(-13px) translateY(250px) scale(1.4)";
             boxes["box2"].style.opacity = "0.2";
-            boxes["box2"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box2"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box3"].style.transform = "translateX(13px) translateY(250px) scale(1.4)";
             boxes["box3"].style.opacity = "0.2";
-            boxes["box3"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box3"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box4"].style.transform = "translateX(40px) translateY(250px) scale(1.4)";
             boxes["box4"].style.opacity = "0.2";
-            boxes["box4"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box4"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
-            boxes["box5"].style.transform = "translateX(120px) translateY(200px) scale(1.3)";
+            boxes["box5"].style.transform = "translateX(100px) translateY(190px) scale(1.5)";
             boxes["box5"].style.opacity = "0.2";
-            boxes["box5"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box5"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box6"].style.transform = "translateX(40px) translateY(170px) scale(1.3)";
             boxes["box6"].style.opacity = "0.2";
-            boxes["box6"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box6"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box7"].style.transform = "translateX(-40px) translateY(170px) scale(1.3)";
             boxes["box7"].style.opacity = "0.2";
-            boxes["box7"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box7"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
-            boxes["box8"].style.transform = "translateX(-120px) translateY(200px) scale(1.3)";
+            boxes["box8"].style.transform = "translateX(-100px) translateY(190px) scale(1.5)";
             boxes["box8"].style.opacity = "0.2";
-            boxes["box8"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box8"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box9"].style.transform = "translateX(-70px) translateY(20px) scale(1.7)";
             boxes["box9"].style.opacity = "0.2";
-            boxes["box9"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box9"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box10"].style.transform = "translateX(70px) translateY(20px) scale(1.7)";
             boxes["box10"].style.opacity = "0.2";
-            boxes["box10"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box10"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
             boxes["box11"].style.transform = "translateX(0px) translateY(-200px) scale(1.4)";
             boxes["box11"].style.opacity = "0.2";
-            boxes["box11"].style.transition = "all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box11"].style.transition = "all 0s cubic-bezier(.07,1.33,1,1)";
 
         }
 
@@ -1598,7 +1598,7 @@
             lockclock.classList.remove("tat");
             dateText.classList.remove("tat");
 
-            allApp.style.transition = "all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1)";
+            allApp.style.transition = "all 0.85s cubic-bezier(.19,1.5,.47,1)";
             allApp.classList.remove("lock");
             battery2.classList.remove("close");
             battery1.classList.remove("close");
@@ -1890,14 +1890,14 @@
 
 
   <script>
-    // Hiển thị loading trong 5 giây rồi ẩn
+
     setTimeout(() => {
       const loading = document.getElementById("loading-screen");
       loading.style.opacity = "0";
       setTimeout(() => {
         loading.style.display = "none";
-      }, 300); // Thời gian cho hiệu ứng mờ
-    }, 5000); // 5 giây
+      }, 300); 
+    }, 0); // 5 giây
   </script>
 </body>
 
