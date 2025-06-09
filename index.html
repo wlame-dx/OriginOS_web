@@ -1454,7 +1454,7 @@
                     clearTimeout(autoHideClickablesTimer);
 
                     if (currentOpeningBtn) {
-                        currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(0.17, 0.84, 0.44, 1)";
+                        currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(.17,.75,.15,.89)";
                         currentOpeningBtn.classList.remove("open");
                         currentOpeningBtn.classList.remove("hien");
 
@@ -1890,13 +1890,12 @@
 
 
   <script>
-
     setTimeout(() => {
       const loading = document.getElementById("loading-screen");
       loading.style.opacity = "0";
       setTimeout(() => {
         loading.style.display = "none";
-      }, 300); 
+      }, 300);
     }, 5000); // 5 giây
   </script>
 </body>
