@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light">
     <title>OriginOS</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
@@ -11,26 +12,32 @@
         href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
         rel="stylesheet">
     <style>
-        * {
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color-scheme: light; /* Ngăn scrollbars bị tối */
+                background-color: #353535;
+                color: black;
+            }
+            * {
             -webkit-tap-highlight-color: transparent;
-        }
+            }
 
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #353535;
-            user-select: none;
-            margin-bottom: 60px;
-            scale: 1;
-            touch-action: none;
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #353535;
+                user-select: none;
+                margin-bottom: 60px;
+                scale: 1;
+                touch-action: none;
         }
-
+    }
         .phone {
             width: 330px;
             height: 700px;
@@ -1066,7 +1073,7 @@
 
     <div id="loading-screen">
     <div class="spinner"></div>
-    <p>Loading OriginOS V1.1.10</p>
+    <p>Loading OriginOS V1.1.20</p>
     <p>by: Quandz24</p>
     <p>tiktok: @sungsamtech - @._naq.</p>
   </div>
@@ -1121,7 +1128,7 @@
                     </div>
                     <div class="khaysetting2">
                         <div class="left-text">Version</div>
-                        <div class="left-text-small">&nbsp;V1.1.10</div>
+                        <div class="left-text-small">&nbsp;V1.1.20</div>
                     </div>
                     <div class="originos"></div>
                 </div>
@@ -1303,8 +1310,8 @@
         function openPopupFromCurrentButton() {
             if (!currentOpeningBtn) return;
             if (app) app.classList.add("open");
-            if (scale < 1) currentOpeningBtn.style.transition = "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-            if (scale < 0.7) currentOpeningBtn.style.transition = "all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            if (scale < 1) currentOpeningBtn.style.transition = "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            if (scale < 0.7) currentOpeningBtn.style.transition = "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
             WallPaper.classList.add("open");
 
             currentOpeningBtn.classList.add("open");
@@ -1450,9 +1457,7 @@
 
         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"].forEach((num) => {
             document.getElementById(`clickableBox${num}`).addEventListener("click", () => {
-
                     clearTimeout(autoHideClickablesTimer);
-
                     if (currentOpeningBtn) {
                         currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(.17,.75,.15,.89)";
                         currentOpeningBtn.classList.remove("open");
@@ -1462,27 +1467,26 @@
                             el.style.display = "block";
                         });
                         
-
                         app.classList.remove("open");
                         app = appopen[`box${num}`];
 
-                        lp.style.transition = "all 0.15s";
-                        lp.classList.remove("open");
+                        //lp.style.transition = "all 0.15s";
+                        //lp.classList.remove("open");
 
                         if (nav) nav.classList.remove("open");
 
-                            currentOpeningBtn.style.transform = `scale(1)`;
-                            currentOpeningBtn.style.zIndex = "5";
+                        currentOpeningBtn.style.transform = `scale(1)`;
+                        currentOpeningBtn.style.zIndex = "5";
 
-                            lp.style.transition = "all 0.3s";
-                            WallPaper.classList.remove("open");
+                        //lp.style.transition = "all 0.3s";
+                        //WallPaper.classList.remove("open");
 
-                            currentOpeningBtn = boxes[`box${num}`];
+                        currentOpeningBtn = boxes[`box${num}`];
 
-                            openPopupFromCurrentButton();
-                            autoHideClickablesTimer = setTimeout(() => {
-                                if (isMo) hideAllClickables();
-                            }, 570);
+                        openPopupFromCurrentButton();
+                        autoHideClickablesTimer = setTimeout(() => {
+                            if (isMo) hideAllClickables();
+                        }, 570);
                     } else {
                         currentOpeningBtn = boxes[`box${num}`];
                         currentOpeningBtn.style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
@@ -1890,14 +1894,13 @@
 
 
   <script>
-    // Hiển thị loading trong 5 giây rồi ẩn
     setTimeout(() => {
       const loading = document.getElementById("loading-screen");
       loading.style.opacity = "0";
       setTimeout(() => {
         loading.style.display = "none";
-      }, 300); // Thời gian cho hiệu ứng mờ
-    }, 5000); // 5 giây
+      }, 300);
+    }, 5000);
   </script>
 </body>
 
