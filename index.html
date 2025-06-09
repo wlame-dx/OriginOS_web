@@ -1454,7 +1454,7 @@
                     clearTimeout(autoHideClickablesTimer);
 
                     if (currentOpeningBtn) {
-                        currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(.17,.75,.15,.89)";
+                        currentOpeningBtn.style.transition = "all 0.6s";
                         currentOpeningBtn.classList.remove("open");
                         currentOpeningBtn.classList.remove("hien");
 
@@ -1890,12 +1890,13 @@
 
 
   <script>
+    // Hiển thị loading trong 5 giây rồi ẩn
     setTimeout(() => {
       const loading = document.getElementById("loading-screen");
       loading.style.opacity = "0";
       setTimeout(() => {
         loading.style.display = "none";
-      }, 300);
+      }, 300); // Thời gian cho hiệu ứng mờ
     }, 5000); // 5 giây
   </script>
 </body>
