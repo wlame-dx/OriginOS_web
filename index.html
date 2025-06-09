@@ -1454,7 +1454,7 @@
                     clearTimeout(autoHideClickablesTimer);
 
                     if (currentOpeningBtn) {
-                        currentOpeningBtn.style.transition = "all 0.6s";
+                        currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(.17,.75,.15,.89)";
                         currentOpeningBtn.classList.remove("open");
                         currentOpeningBtn.classList.remove("hien");
 
