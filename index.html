@@ -46,7 +46,7 @@
             background: #000000;
             position: relative;
             overflow: hidden;
-            z-index: 46;
+            z-index: 1;
             transform: scale(0.9);
             touch-action: auto;
         }
@@ -84,7 +84,7 @@
         .circle {
             width: 30px;
             height: 30px;
-            background-color: #474747;
+            background: #474747;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -729,7 +729,7 @@
         .app2,
         .app3,
         .app4main,
-        .app4about,
+        .app4animation,
         .app4,
         .app5,
         .app6,
@@ -749,11 +749,11 @@
             font-weight: bold;
             cursor: default;
             left: 50%;
-            transform: translateX(-50%) translateY(-30%) scale(1);
+            transform: translateX(-50%) translateY(0%) scale(1);
             transform-origin: center;
             top: 00px;
             z-index: 442;
-            transition: all 0.4s;
+            transition: all 0.6s;
             opacity: 0;
             align-items: center;
             justify-content: center;
@@ -764,7 +764,8 @@
         .app1.open,
         .app2.open,
         .app3.open,
-        .app4.open,
+        .app4main.open,
+        .app4animation.open,
         .app5.open,
         .app6.open,
         .app7.open,
@@ -776,51 +777,28 @@
             opacity: 1;
             transform: translateX(-50%) scale(1);
         }
-
-        .khaysetting1,
-        .khaysetting2,
-        .khaysetting {
-            position: absolute;
-            display: fixed;
-            border-radius: 20px;
-            background: #ffffff;
-            background-size: 105%;
-            width: 90%;
-            height: 55px;
-            top: 300px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: default;
-            left: 50%;
-            transform: translateX(-50%) translateY(40px) scale(1);
-            z-index: 443;
-            text-align: center;
+        .app4{
+            opacity: 1;
+            transform: translateX(50%) scale(1);
+            border-radius: 49px;
+            box-shadow: 0 0 0px #000000;
         }
-
-        .khaysetting2 {
-            top: 360px;
+        .app4.open{
+            transform: translateX(-30%) scale(1);
+            box-shadow: 0 0 500px #000000;
         }
-
-        .khaysetting1 {
-            top: 160px;
+        .app4animation{
+            opacity: 1;
+            transform: translateX(70%) scale(1);
+            border-radius: 49px;
+            box-shadow: 0 0 0px #000000;
         }
-
-        .click-area {
-            position: absolute;
-            display: fixed;
-            border-radius: 20px;
-            background: #3c03038d;
-            background-size: 105%;
-            width: 90%;
-            height: 55px;
-            top: 160px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: default;
-            left: 50%;
-            transform: translateX(-50%) translateY(40px) scale(1);
-            z-index: 555;
-            text-align: center;
+        .app4animation.open{
+            transform: translateX(-30%) scale(1);
+            box-shadow: 0 0 500px #000000;
+        }
+        .app4main.tat{
+            transform: translateX(-70%) scale(1);
         }
 
         .originos {
@@ -1066,14 +1044,178 @@
       font-family: 'Noto sans', sans-serif;
       color: #ffffff;
     }
+        
+.back-button {
+  position: fixed;
+  top: 55px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Noto sans', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  padding: 5px 10px;
+  z-index: 1000;
+  scale: 1.2;
+}
+
+/* Mũi tên tạo bằng pseudo-element */
+.back-button::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-right: -2px;
+}
+
+
+        .khaysetting1,
+        .khaysetting2,
+        .khaysetting3,
+        .khaysetting4,
+        .khaysetting5,
+        .khaysetting {
+            position: absolute;
+            display: fixed;
+            border-radius: 20px;
+            background: #ffffff;
+            width: 90%;
+            height: 55px;
+            top: 300px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: default;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px) scale(1);
+            z-index: 443;
+            text-align: center;
+        }
+
+        .khaysetting2 {
+            top: 360px;
+        }
+
+        .khaysetting1 {
+            top: 160px;
+        }
+        .khaysetting3 {
+            top: 220px;
+        }
+
+
+        
+        .click-area {
+            position: absolute;
+            background-color: #009e0500;
+            height: 55px;
+            width: 280px;
+            top: 225px;
+            font-size: 24px;
+            font-weight: bold;
+            color: transparent;
+            cursor: pointer;
+            z-index: 346765;
+            outline: none;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .click-back-about {
+            position: absolute;
+            background-color: #009e5400;
+            height: 55px;
+            width: 55px;
+            top: 70px;
+            font-size: 24px;
+            font-weight: bold;
+            color: transparent;
+            cursor: pointer;
+            z-index: 346765;
+            outline: none;
+            left: 0;
+            transform: translateX(-250%);
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+    .select-speed-wrapper {
+      margin-bottom: 200px;
+      display: none;
+      z-index: 12312;
+      transform: translateY(50%);
+    }
+
+    .speed-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .speed-box {
+      background: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: border 0.2s ease;
+      z-index: 123;
+    }
+
+    .speed-box.active {
+      border: 2px solid #007bff;
+      background-color: #e6f0ff;
+    }
+
+    .erea-select-speed {
+    background-color: rgba(0, 123, 255, 0.5);
+      position: absolute;
+      width: 77px;
+      height: 77px;
+      z-index: 10;
+      cursor: pointer;
+      transform: translateX(50%) ;
+    }
+
+    /* Định vị từng erea theo ô lưới */
+    #erea-select-speed-1 { top: 20px; left: 10px; }
+    #erea-select-speed-2 { top: 20px; left: 92px; }
+    #erea-select-speed-3 { top: 20px; left: 174px; }
+    #erea-select-speed-4 { top: 105px; left: 10px; }
+    #erea-select-speed-5 { top: 105px; left: 92px; }
+    #erea-select-speed-6 { top: 105px; left: 174px; }
+
     </style>
 </head>
 
 <body>
 
+    <div class="select-speed-wrapper">
+            <div class="erea-select-speed" id="erea-select-speed-1" data-index="0"></div>
+            <div class="erea-select-speed" id="erea-select-speed-2" data-index="1"></div>
+            <div class="erea-select-speed" id="erea-select-speed-3" data-index="2"></div>
+            <div class="erea-select-speed" id="erea-select-speed-4" data-index="3"></div>
+            <div class="erea-select-speed" id="erea-select-speed-5" data-index="4"></div>
+            <div class="erea-select-speed" id="erea-select-speed-6" data-index="5"></div>
+    </div>
+
     <div id="loading-screen">
     <div class="spinner"></div>
-    <p>Loading OriginOS V1.1.20</p>
+    <p>Loading OriginOS V1.1.30</p>
     <p>by: Quandz24</p>
     <p>tiktok: @sungsamtech - @._naq.</p>
   </div>
@@ -1081,7 +1223,11 @@
 
     <div class="area-thanh">
         <div class="thanh" id="thanh"></div>
+        <div class="click-area" id="khaysetting1" style="display: none;"></div>
+        <div class="click-area" id="khaysetting2" style="display: none; top: 285px;"></div>
+        <div class="click-back-about" id="click-back-about" style="display: none;">&lt;</div>
         <div class="thanh-status" id="thanh-status"></div>
+        
     </div>
     <div class="phone">
         <div class="lp2" id="lp2"></div>
@@ -1110,28 +1256,52 @@
                 <div class="nav" style="background: #1f1f1f"></div>
                 <div class="app3" id="app3">soon</div>
             </div>
+
+            
             <div class="box4" id="box4">
                 <div class="nav" style="background: #1f1f1f"></div>
-                <!--<div class="app4main" id="app4main">
-                    <div class="left-text" style="left:50%; top: 80px; font-size: 30px; transform: translateX(-50%);">Setting</div>
+                <div class="app4main" id="app4main">
+                    <div class="left-text" style="left:50%; top: 120px; font-size: 30px; transform: translateX(-50%);">Setting</div>
+                    
                     <div class="khaysetting1" >
                         <div class="circle">i</div>
                         <div class="left-text" style="left: 60px;">About</div>
                         <div class="left-text-small" style="left: 60px;">OS	&middot; information</div>
                     </div>
-                    <div class="click-area" id="khaysetting1"></div>
-                </div>-->>
-                <div class="app4" id="app4">
+
+                    <div class="khaysetting3" >
+                        <div class="circle" style="background: url('https://raw.githubusercontent.com/quandz24-ui/one-ui-7/refs/heads/main/icon_animation.png') no-repeat center center fixed; background-size: 100%;"></div>
+                        <div class="left-text" style="left: 60px;">Animation</div>
+                        <div class="left-text-small" style="left: 60px;">Coming soon &middot; speed animation</div>
+                    </div>
+
+                    <div class="app4" id="app4" style="z-index: 5020;">
+                        <div class="back-button">About</div>
                     <div class="khaysetting">
-                        <div class="left-text">develop</div>
+                        <div class="left-text">DDevelop</div>
                         <div class="left-text-small">TikTok: @sungsamtech - galaxyA15&#10084;.</div>
                     </div>
                     <div class="khaysetting2">
                         <div class="left-text">Version</div>
-                        <div class="left-text-small">&nbsp;V1.1.20</div>
+                        <div class="left-text-small">&nbsp;V1.1.30</div>
                     </div>
                     <div class="originos"></div>
                 </div>
+
+                <div class="app4animation" id="app4animation" style="z-index: 123213123;;">
+                    <div class="back-button">Animation</div>
+                    <div class="speed-container">
+                        <div class="speed-box" data-speed="0.8">0.8x</div>
+                        <div class="speed-box active" data-speed="1">1x</div>
+                        <div class="speed-box" data-speed="1.5">1.5x</div>
+                        <div class="speed-box" data-speed="4">4x</div>
+                        <div class="speed-box" data-speed="8">8x</div>
+                        <div class="speed-box" data-speed="10">10x</div>
+                    </div>
+                </div>
+
+                </div>
+                
             </div>
             <div class="box5" id="box5">
                 <div class="nav" style="background: #1f1f1f"></div>
@@ -1245,6 +1415,7 @@
             box12: document.getElementById("box12"),
             box13: document.getElementById("box13"),
         };
+
         boxes[`box1`].classList.add("lock");
         boxes[`box2`].classList.add("lock");
         boxes[`box3`].classList.add("lock");
@@ -1257,11 +1428,12 @@
         boxes[`box10`].classList.add("lock");
         boxes[`box11`].classList.add("lock");
         document.querySelector(".khayapp").classList.add("lock");
+
         const appopen = {
             box1: document.getElementById("app1"),
             box2: document.getElementById("app2"),
             box3: document.getElementById("app3"),
-            box4: document.getElementById("app4"),
+            box4: document.getElementById("app4main"),
             box5: document.getElementById("app5"),
             box6: document.getElementById("app6"),
             box7: document.getElementById("app7"),
@@ -1300,6 +1472,7 @@
         let autoHideClickablesTimer = null;
         let closing = false;
         let app = null;
+        let currentSpeed = 1;
 
         function hideAllClickables() {
             Object.values(clickables).forEach((el) => {
@@ -1310,8 +1483,10 @@
         function openPopupFromCurrentButton() {
             if (!currentOpeningBtn) return;
             if (app) app.classList.add("open");
-            if (scale < 1) currentOpeningBtn.style.transition = "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-            if (scale < 0.7) currentOpeningBtn.style.transition = "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            currentOpeningBtn.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            if (scale < 1) currentOpeningBtn.style.transition = `all calc(0.4s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            if (scale < 0.7) currentOpeningBtn.style.transition = `all calc(0.3s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            allApp.style.transition = wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
             WallPaper.classList.add("open");
 
             currentOpeningBtn.classList.add("open");
@@ -1324,7 +1499,7 @@
 
             thanh.classList.add("open");
             lp.classList.add("open");
-            allApp.style.transition = "all 0.5s cubic-bezier(0.23, 0.55, 0.54, 0.97)";
+
             allApp.classList.add("open");
 
             const boxId = Object.keys(boxes).find(
@@ -1333,43 +1508,54 @@
             if (boxId) clickables[boxId].style.display = "none";
 
             nav = currentOpeningBtn.querySelector(".nav");
-            if (nav) nav.classList.add("open");
+            if (nav) {
+                nav.style.transition = `all calc(0.3s * ${currentSpeed})`;
+                nav.classList.add("open");
+            }
 
             isMo = true;
         }
 
         const scale = 1;
-
         function closePopup() {
             if (!currentOpeningBtn) return;
             app.classList.remove("open");
-            currentOpeningBtn.style.transition = "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            currentOpeningBtn.style.transition = `all calc(0.3s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             clearTimeout(autoHideClickablesTimer);
             closing = true;
             setTimeout(() => {
                 closing = false;
             }, 300);
             currentOpeningBtn.classList.remove("open");
-            setTimeout(() => {
-                currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1)`;
-                currentOpeningBtn.classList.remove("hien");
-                currentOpeningBtn = null;
-                scale = 1;
-            }, 50);
+
+            allApp.style.transition = wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
             WallPaper.classList.remove("open");
             lp.classList.remove("open");
             currentOpeningBtn.style.zIndex = "5";
 
             thanh.style.transform = "translateX(-50%)";
-            allApp.style.transition = "all 0.5s cubic-bezier(0.23, 0.55, 0.54, 0.97)";
+            
             allApp.classList.remove("open");
 
-            if (nav) nav.classList.remove("open");
+            setTimeout(() => {
+                allApp.style.transition = `transform calc(0.6s * ${currentSpeed}) cubic-bezier(1,-0.8,1,.1)`;
+                currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1)`;
+                currentOpeningBtn.classList.remove("hien");
+                currentOpeningBtn = null;
+                scale = 1;
+            }, 0 * currentSpeed);
+
+            if (nav) {
+                nav.style.transition = `all calc(0.3s * ${currentSpeed})`;
+                nav.classList.remove("open");
+            }
             isMo = false;
 
             Object.values(clickables).forEach((el) => {
                 el.style.display = "block";
             });
+            AboutInSetting.style.display = "none";
+            back.style.display = "none";
         }
 
         function updateTransform(y, x) {
@@ -1383,7 +1569,7 @@
             if (displayY > 100) displayY = 100;
             const scale = 1 - y / 300 + 0.074;
 
-            currentOpeningBtn.style.transition = "all 0.1s";
+            currentOpeningBtn.style.transition = `all 0.1s`;
             currentOpeningBtn.style.transform = `translateX(${x}px) translateY(${-displayY}px) scale(${scale})`;
 
             thanh.style.transition = "none";
@@ -1392,7 +1578,7 @@
 
         function resetpop() {
             thanh.classList.add("open");
-            currentOpeningBtn.style.transition = "all 0.3s";
+            currentOpeningBtn.style.transition = `all calc(0.3s * ${currentSpeed})`;
             currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.074)`;
             thanh.style.transform = `translateX(-50%) translateY(0%) scale(1)`;
         }
@@ -1459,7 +1645,7 @@
             document.getElementById(`clickableBox${num}`).addEventListener("click", () => {
                     clearTimeout(autoHideClickablesTimer);
                     if (currentOpeningBtn) {
-                        currentOpeningBtn.style.transition = "all 0.6s cubic-bezier(.17,.75,.15,.89)";
+                        currentOpeningBtn.style.transition = `all calc(0.6s * ${currentSpeed}) cubic-bezier(.17,.75,.15,.89)`;
                         currentOpeningBtn.classList.remove("open");
                         currentOpeningBtn.classList.remove("hien");
 
@@ -1486,18 +1672,22 @@
                         openPopupFromCurrentButton();
                         autoHideClickablesTimer = setTimeout(() => {
                             if (isMo) hideAllClickables();
-                        }, 570);
+                        }, 570 * currentSpeed);
+                        AboutInSetting.style.display = "none";
+                        back.style.display = "none";
+                        animationInSetting.style.display = "none";
+                        selectSpeed.style.display = "none";
                     } else {
                         currentOpeningBtn = boxes[`box${num}`];
-                        currentOpeningBtn.style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+                        currentOpeningBtn.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
                         app = appopen[`box${num}`];
                         openPopupFromCurrentButton();
                         autoHideClickablesTimer = setTimeout(() => {
                             if (isMo) hideAllClickables();
-                        }, 400);
+                        }, 400 * currentSpeed);
                     }
                 });
-        });
+            });
 
 
         // DOM elements
@@ -1539,6 +1729,7 @@
 
             hideAllClickables();
             clock.classList.remove("hien");
+            document.querySelector(".khayapp").style.transition = `all 0s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             document.querySelector(".khayapp").classList.add("lock");
 
             boxes["box1"].style.transform = "translateX(-40px) translateY(250px) scale(1.4)";
@@ -1602,7 +1793,7 @@
             lockclock.classList.remove("tat");
             dateText.classList.remove("tat");
 
-            allApp.style.transition = "all 0.85s cubic-bezier(.19,1.5,.47,1)";
+            allApp.style.transition = `all calc(0.85s * ${currentSpeed}) cubic-bezier(.19,1.5,.47,1)`;
             allApp.classList.remove("lock");
             battery2.classList.remove("close");
             battery1.classList.remove("close");
@@ -1621,40 +1812,41 @@
             setTimeout(() => {
             boxes[`box1`].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes[`box1`].style.opacity = "1";
-            boxes[`box1`].style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes[`box1`].style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             boxes[`box2`].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes[`box2`].style.opacity = "1";
-            boxes[`box2`].style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes[`box2`].style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             boxes[`box3`].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes[`box3`].style.opacity = "1";
-            boxes[`box3`].style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes[`box3`].style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             
             boxes[`box4`].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes[`box4`].style.opacity = "1";
-            boxes[`box4`].style.transition = "all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes[`box4`].style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            document.querySelector(".khayapp").style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             document.querySelector(".khayapp").classList.remove("lock");
             }, 120);
 
             setTimeout(() => {
             boxes["box5"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box5"].style.opacity = "1";
-            boxes["box5"].style.transition = "all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box5"].style.transition = `all calc(0.45s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             boxes["box8"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box8"].style.opacity = "1";
-            boxes["box8"].style.transition = "all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box8"].style.transition = `all calc(0.45s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             }, 90);
             
             setTimeout(() => {
             
             boxes["box6"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box6"].style.opacity = "1";
-            boxes["box6"].style.transition = "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box6"].style.transition = `all calc(0.4s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             boxes["box7"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box7"].style.opacity = "1";
-            boxes["box7"].style.transition = "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box7"].style.transition = `all calc(0.4s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             }, 60);
 
             
@@ -1662,17 +1854,17 @@
             
             boxes["box9"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box9"].style.opacity = "1";
-            boxes["box9"].style.transition = "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box9"].style.transition = `all calc(0.35s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
 
             boxes["box10"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box10"].style.opacity = "1";
-            boxes["box10"].style.transition = "all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box10"].style.transition = `all calc(0.35s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             }, 30);
             
             setTimeout(() => {
             boxes["box11"].style.transform = "translateX(0px) translateY(0px) scale(1)";
             boxes["box11"].style.opacity = "1";
-            boxes["box11"].style.transition = "all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            boxes["box11"].style.transition = `all calc(0.3s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
             }, 0);
         }
 
@@ -1685,6 +1877,7 @@
 
         powerbtn.addEventListener('click', () => {
             if (ison) {
+                battery3.style.transition = battery2.style.transition = battery1.style.transition = dateText.style.transition = lockclock.style.transition = wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
                 wallpaper.classList.add("lock");
 
                 ison = false;
@@ -1697,6 +1890,7 @@
                 closePopup_noanim()
             }
             else {
+                wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
                 wallpaper.classList.remove("lock");
                 ison = true;
                 lockclock.classList.remove("tat");
@@ -1707,6 +1901,16 @@
                 thanhS1.style.pointerEvents = "auto";
             }
             lock();
+
+            back.style.display = "none";
+
+            AboutInSetting.style.display = "none";
+            animationInSetting.style.display = "none";
+
+            app4animation.classList.remove("open");
+            app4.classList.remove("open");
+            app4main.classList.remove("tat");
+            selectSpeed.style.display = "none";
         });
 
         lockscreen.addEventListener('click', () => {
@@ -1721,15 +1925,78 @@
         });
 
 
+
+
         // in setting
-        //const AboutInSetting = document.getElementById("khaysetting1");
-        //const app4 = document.getElementById("app4");
-        //const app4main = document.getElementById("app4main");
-        //
-        //AboutInSetting.addEventListener('click', () => {
-        //app4.classList.add("open");
-        //app4main.classList.add("tat");
-        //});
+
+        const AboutInSetting = document.getElementById("khaysetting1");
+        const animationInSetting = document.getElementById("khaysetting2");
+        const app4animation = document.getElementById("app4animation");
+        const back = document.getElementById("click-back-about");
+        const selectSpeed = document.querySelector(".select-speed-wrapper");
+
+        document.getElementById(`clickableBox4`).addEventListener("click", () => {
+            AboutInSetting.style.display = "flex";
+            animationInSetting.style.display = "flex";
+        });
+        AboutInSetting.addEventListener("click", () => {
+            AboutInSetting.style.display = "flex";
+        });
+
+        const app4 = document.getElementById("app4");
+        const app4main = document.getElementById("app4main");
+        
+        AboutInSetting.addEventListener("click", () => {
+            app4.classList.add("open");
+            app4main.classList.add("tat");
+            back.style.display = "flex";
+            AboutInSetting.style.display = "none";
+            animationInSetting.style.display = "none";
+        });
+
+        animationInSetting.addEventListener("click", () => {
+            app4animation.classList.add("open");
+            app4main.classList.add("tat");
+            back.style.display = "flex";
+            animationInSetting.style.display = "none";
+            AboutInSetting.style.display = "none";
+            selectSpeed.style.display = "flex";
+        });
+
+        back.addEventListener("click", () => {
+            app4.classList.remove("open");
+            app4animation.classList.remove("open");
+            app4main.classList.remove("tat");
+            back.style.display = "none";
+            AboutInSetting.style.display = "flex";
+            animationInSetting.style.display = "flex";
+            selectSpeed.style.display = "none";
+        });
+
+        thanh.addEventListener("mousedown", (e) => {
+            back.style.display = "none";
+
+            AboutInSetting.style.display = "none";
+            animationInSetting.style.display = "none";
+
+            app4animation.classList.remove("open");
+            app4.classList.remove("open");
+            app4main.classList.remove("tat");
+            selectSpeed.style.display = "none";
+        });
+        thanh.addEventListener("touchend", (e) => {
+            back.style.display = "none";
+
+            AboutInSetting.style.display = "none";
+            animationInSetting.style.display = "none";
+
+            app4animation.classList.remove("open");
+            app4.classList.remove("open");
+            app4main.classList.remove("tat");
+            selectSpeed.style.display = "none";
+        });
+
+
 
         // -- nofication --
         const thanhS1 = document.querySelector(".thanh-status");
@@ -1887,6 +2154,26 @@
                 el.style.display = "block";
             });
         }
+
+  const boxes2 = document.querySelectorAll('.speed-box');
+  const ereas = document.querySelectorAll('.erea-select-speed');
+  ereas.forEach(erea => {
+    erea.addEventListener('click', () => {
+      const index = parseInt(erea.dataset.index);
+      const selectedBox = boxes2[index];
+
+      boxes2.forEach(b => b.classList.remove('active'));
+
+      selectedBox.classList.add('active');
+
+      currentSpeed = parseFloat(selectedBox.dataset.speed);
+      console.log("Tốc độ hiện tại:", currentSpeed);
+
+      Object.values(boxes).forEach((el) => {
+            el.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94);`;
+        });
+    });
+  });
     </script>
 
 
@@ -1900,7 +2187,7 @@
       setTimeout(() => {
         loading.style.display = "none";
       }, 300);
-    }, 5000);
+    }, 5000); // 5 giây
   </script>
 </body>
 
