@@ -2175,7 +2175,7 @@
                     <h2>Version 1.2.50</h2>
                     <p>
                       fixed animation - New animation<br />Added more
-                      Language<br />Added more security<br />Save user data 
+                      Language<br />Added more security<br />Fixed bugs
                     </p>
                   </div>
                 </div>
@@ -2699,15 +2699,6 @@
                     <div class="lang_label">Tiếng Việt</div>
                     <div class="translator_note">Bởi TikTok: @sungsamtech</div>
                   </div>
-
-                  <div
-                    class="lang_button"
-                    data-lang="tl"
-                    onclick="selectLanguage(this); tl_language();"
-                  >
-                    <div class="lang_label">Tagalog</div>
-                    <div class="translator_note">Mula sa TikTok: @fe.i.n</div>
-                  </div>
                   <div
                     class="lang_button"
                     onclick="selectLanguage(this); pl_language()"
@@ -2728,10 +2719,12 @@
                   </div>
                   <div
                     class="lang_button"
-                    onclick="selectLanguage(this); ph_language()"
+                    onclick="selectLanguage(this); tl_language();"
                   >
                     <div class="lang_label">Filipino</div>
-                    <div class="translator_note">TikTok: @nathaniel_mav1</div>
+                    <div class="translator_note">
+                      Mula sa TikTok: @fe.i.n - @nathaniel_mav1
+                    </div>
                   </div>
 
                   <div class="footer-text">Translation may not be correct</div>
@@ -5724,7 +5717,8 @@
         localStorage.setItem("language", "pl");
 
         document.getElementById("name_setting").textContent = "Ustawienia";
-        document.getElementById("about_name_setting").textContent = "O";
+        document.getElementById("about_name_setting").textContent =
+          "Informacje";
         document.getElementById("about_name_small_setting").textContent =
           "informacje o systemie";
         document.getElementById("animation_name_setting").textContent =
