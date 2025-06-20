@@ -3213,12 +3213,12 @@
         deltaY = 0;
         deltaX = 0;
 
-        if (hideBlur) {
+      
           clearTimeout(hideBlur);
           lp.style.transition = `all 0s`;
           lp.classList.add("open");
           hideBlur = null;
-        }
+        
 
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
@@ -3278,12 +3278,12 @@
         startY = e.clientY;
         startX = e.clientX;
 
-        if (hideBlur) {
+      
           clearTimeout(hideBlur);
           lp.style.transition = `all 0s`;
           lp.classList.add("open");
           hideBlur = null;
-        }
+        
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
           animationInSetting.style.pointerEvents = "auto";
