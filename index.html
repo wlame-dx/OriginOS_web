@@ -994,7 +994,7 @@
         align-items: center;
         justify-content: center;
         z-index: 199;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
         opacity: 0;
         transition: all 0.3s ease;
         z-index: 1;
@@ -1529,10 +1529,10 @@
       }
       .lp {
         position: absolute;
-        top: -30px;
-        left: -20px;
-        width: 100vw;
-        height: 100vh;
+        top: -40px;
+        left: -30px;
+        width: 110vw;
+        height: 110vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1962,7 +1962,7 @@
   <body>
     <div id="loading-screen">
       <div class="spinner"></div>
-      <p>Loading OriginOS V1.2.50</p>
+      <p>Loading OriginOS V1.2.60</p>
       <p>by: Quandz24</p>
       <p id="lolhaha">tiktok: @sungsamtech - @._naq.</p>
     </div>
@@ -1984,7 +1984,7 @@
       <div class="status-battery">
         <div class="battery-small"></div>
         <div class="battery-small2"></div>
-        <div class="battery-num" id="batery-num">20</div>
+        <div class="battery-num" id="batery-num">100</div>
       </div>
       <div class="camera"></div>
       <div class="status-time" id="lockclock2">
@@ -2174,9 +2174,15 @@
                   <div class="content-box-vesion">
                     <h2>Version 1.2.50</h2>
                     <p>
-                      fixed animation - New animation<br />Added more
+                      Fixed animation - New animation<br />Added more
                       Language<br />Added more security<br />Fixed bugs
                     </p>
+                  </div>
+                </div>
+                <div class="vesion_text" style="top: 430px">
+                  <div class="content-box-vesion" style="height: 80px">
+                    <h2>Version 1.2.60</h2>
+                    <p>New animation faster<br />Fixed bug Language</p>
                   </div>
                 </div>
               </div>
@@ -2222,12 +2228,12 @@
                 <div class="scaling-box" id="scaling-box"></div>
               </div>
               <div class="speed-container">
-                <div class="speed-box" data-speed="0.8">0.8x</div>
-                <div class="speed-box active" data-speed="1">1x</div>
-                <div class="speed-box" data-speed="1.5">1.5x</div>
-                <div class="speed-box" data-speed="4">4x</div>
-                <div class="speed-box" data-speed="8">8x</div>
-                <div class="speed-box" data-speed="10">10x</div>
+                <div class="speed-box" data-speed="0.6">0.8x</div>
+                <div class="speed-box active" data-speed="0.7">1x</div>
+                <div class="speed-box" data-speed="1">1.5x</div>
+                <div class="speed-box" data-speed="3">4x</div>
+                <div class="speed-box" data-speed="6">8x</div>
+                <div class="speed-box" data-speed="8">10x</div>
               </div>
               <div class="setting-item" style="top: none; margin-top: 440px">
                 <div class="setting-title"></div>
@@ -3053,12 +3059,16 @@
       let nav = null;
       let isMo = false;
       let autoHideClickablesTimer = null;
+      let hideBlur = null;
       let closing = false;
       let app = null;
-      let currentSpeed = 1;
+      let currentSpeed = 0.7;
+      let currentSpeed6 = 0.6 * currentSpeed;
       let currentSpeed5 = 0.5 * currentSpeed;
       let currentSpeed4 = 0.4 * currentSpeed;
+      let currentSpeed4_2 = 0.4 * currentSpeed * currentSpeed;
       let currentSpeed3 = 0.3 * currentSpeed;
+      let currentSpeed2 = 0.2 * currentSpeed;
 
       function hideAllClickables() {
         Object.values(clickables).forEach((el) => {
@@ -3070,11 +3080,11 @@
         if (!currentOpeningBtn) return;
         thanh.classList.add("open");
         if (app) app.classList.add("open");
-        currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.26,.72,.33,.89)`;
+        currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.26,.72,.33,.89), height ${currentSpeed5}s cubic-bezier(.31,.9,1,1)`;
         if (scale < 1)
-          currentOpeningBtn.style.transition = `all ${currentSpeed4}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+          currentOpeningBtn.style.transition = `all ${currentSpeed4}s cubic-bezier(.26,.72,.33,.89), height ${currentSpeed4}s cubic-bezier(.31,.9,1,1)`;
         if (scale < 0.7)
-          currentOpeningBtn.style.transition = `all calc(0.3s * ${currentSpeed}) cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+          currentOpeningBtn.style.transition = `all ${currentSpeed3}s cubic-bezier(.26,.72,.33,.89), height ${currentSpeed3}s cubic-bezier(.31,.9,1,1)`;
         allApp.style.transition =
           wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
 
@@ -3117,7 +3127,7 @@
       function closePopup() {
         if (!currentOpeningBtn) return;
         app.classList.remove("open");
-        currentOpeningBtn.style.transition = `all ${currentSpeed4}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed5}s cubic-bezier(.43,.25,.58,.67), height ${currentSpeed4}s`;
         clearTimeout(autoHideClickablesTimer);
         closing = true;
         setTimeout(() => {
@@ -3126,14 +3136,17 @@
         currentOpeningBtn.classList.remove("open");
         currentOpeningBtn.style.scale = `${scale_icon}%`;
 
-        allApp.style.transition =
-          wallpaper.style.transition = `all ${currentSpeed5}s`;
+        allApp.style.transition = `all ${currentSpeed5}s`;
+        wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(.35,.04,.69,.94)`;
+
         wallpaper.style.filter = "blur(0px)";
         wallpaper.style.scale = `100%`;
         currentOpeningBtn.style.zIndex = "5";
 
         thanh.style.transform = "translateX(-50%)";
         thanh.classList.remove("open");
+
+        lp.style.transition = `all ${currentSpeed5}s cubic-bezier(0.2, 0.2, 0.12, 1)`;
         lp.classList.remove("open");
 
         hide_app = setTimeout(() => {
@@ -3170,7 +3183,7 @@
         if (displayY > 100) displayY = 100;
         const scale = 1 - y / 200 + 0.074;
 
-        currentOpeningBtn.style.transition = `all calc(0.1s)`;
+        currentOpeningBtn.style.transition = `all 0.1s`;
         currentOpeningBtn.style.transform = `translateX(${x}px) translateY(${-displayY}px) scale(${scale})`;
 
         thanh.style.transition = "none";
@@ -3200,33 +3213,34 @@
         deltaY = 0;
         deltaX = 0;
 
+        if (hideBlur) {
+          clearTimeout(hideBlur);
+          lp.style.transition = `all 0s`;
+          lp.classList.add("open");
+          hideBlur = null;
+        }
+
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
           animationInSetting.style.pointerEvents = "auto";
           document.getElementById("scaling-box").style.animation = "none";
 
-          if (currentOpeningBtn === boxes["box4"]) {
-            theme_option.style.pointerEvents = "auto";
-            animationInSetting.style.pointerEvents = "auto";
-            document.getElementById("scaling-box").style.animation = "none";
+          AboutInSetting.style.pointerEvents = "auto";
+          theme_option.style.pointerEvents = "auto";
+          AboutInSetting.style.pointerEvents = "auto";
+          animationInSetting.style.pointerEvents = "auto";
 
-            AboutInSetting.style.pointerEvents = "auto";
-            theme_option.style.pointerEvents = "auto";
-            AboutInSetting.style.pointerEvents = "auto";
-            animationInSetting.style.pointerEvents = "auto";
-
-            hidePopup_open_close(app4);
-            hidePopup_open_close(credits);
-            hidePopup_open_close(app4_vesion);
-            hidePopup_open_close(app4animation);
-            hidePopup_open_close(app4_theme);
-            hidePopup_open_close(app4_home);
-            hidePopup_open_close(wallpaper_option);
-            hidePopup_open_close(aod_option);
-            hidePopup_open_close(lock_option);
-            hidePopup_open_close(app4_finger);
-            hidePopup_open_close(app4language);
-          }
+          hidePopup_open_close(app4);
+          hidePopup_open_close(credits);
+          hidePopup_open_close(app4_vesion);
+          hidePopup_open_close(app4animation);
+          hidePopup_open_close(app4_theme);
+          hidePopup_open_close(app4_home);
+          hidePopup_open_close(wallpaper_option);
+          hidePopup_open_close(aod_option);
+          hidePopup_open_close(lock_option);
+          hidePopup_open_close(app4_finger);
+          hidePopup_open_close(app4language);
         }
       });
 
@@ -3264,6 +3278,12 @@
         startY = e.clientY;
         startX = e.clientX;
 
+        if (hideBlur) {
+          clearTimeout(hideBlur);
+          lp.style.transition = `all 0s`;
+          lp.classList.add("open");
+          hideBlur = null;
+        }
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
           animationInSetting.style.pointerEvents = "auto";
@@ -3324,7 +3344,7 @@
           .addEventListener("click", () => {
             clearTimeout(autoHideClickablesTimer);
             if (currentOpeningBtn) {
-              currentOpeningBtn.style.transition = `all ${currentSpeed5} cubic-bezier(.64,.38,.33,.89)`;
+              currentOpeningBtn.style.transition = `all ${currentSpeed4} cubic-bezier(.64,.38,.33,.89), height ${currentSpeed4}s`;
               currentOpeningBtn.classList.remove("open");
               currentOpeningBtn.classList.remove("hien");
               currentOpeningBtn.style.scale = `${scale_icon}%`;
@@ -3332,6 +3352,13 @@
               Object.values(clickables).forEach((el) => {
                 el.style.display = "block";
               });
+
+              if (hideBlur) {
+                clearTimeout(hideBlur);
+                lp.style.transition = `all 0s`;
+                lp.classList.add("open");
+                hideBlur = null;
+              }
 
               app.style.display = "none";
               app.classList.remove("open");
@@ -3353,7 +3380,12 @@
               openPopupFromCurrentButton();
               autoHideClickablesTimer = setTimeout(() => {
                 if (isMo) hideAllClickables();
-              }, 400 * currentSpeed);
+              }, 500 * currentSpeed);
+              hideBlur = setTimeout(() => {
+                lp.style.transition = `all 0s`;
+                lp.classList.remove("open");
+                hideBlur = null;
+              }, 500 * currentSpeed);
             } else {
               currentOpeningBtn = boxes[`box${num}`];
               currentOpeningBtn.style.transition = `all ${currentSpeed5} cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
@@ -3362,7 +3394,12 @@
               openPopupFromCurrentButton();
               autoHideClickablesTimer = setTimeout(() => {
                 if (isMo) hideAllClickables();
-              }, 400 * currentSpeed);
+              }, 500 * currentSpeed);
+              hideBlur = setTimeout(() => {
+                lp.style.transition = `all 0s`;
+                lp.classList.remove("open");
+                hideBlur = null;
+              }, 500 * currentSpeed);
             }
           });
       });
@@ -3513,7 +3550,7 @@
         dateText.style.transform =
           "translateY(0px) translateX(-50%) scale(0.95)";
 
-        allApp.style.transition = `all calc(0.85s * ${currentSpeed}) cubic-bezier(.19,1.5,.47,1)`;
+        allApp.style.transition = `all calc(1s * ${currentSpeed}) cubic-bezier(.12,1.43,.51,1.01)`;
         allApp.classList.remove("lock");
 
         battery2.classList.remove("close");
@@ -3909,11 +3946,11 @@
         blur_app = this.classList.contains("active") ? 1 : 0;
 
         if (blur_app) {
-          lp.style.filter = "blur(10px)";
+          lp.style.filter = "blur(20px)";
           localStorage.setItem("blur_App_saved", blur_app);
         } else {
           lp.style.filter = "blur(0px)";
-          localStorage.remoItem("blur_App_saved");
+          localStorage.setItem("blur_App_saved", blur_app);
         }
       });
 
@@ -4737,15 +4774,15 @@
 
           // Cập nhật biến tốc độ
           currentSpeed = parseFloat(box.dataset.speed);
+          currentSpeed6 = 0.6 * currentSpeed;
           currentSpeed5 = 0.5 * currentSpeed;
           currentSpeed4 = 0.4 * currentSpeed;
           currentSpeed3 = 0.3 * currentSpeed;
+          currentSpeed2 = 0.2 * currentSpeed;
           duration = 1.7 * currentSpeed;
           document.getElementById(
             "scaling-box"
           ).style.animation = `scaleUpDown ${duration}s ease-out infinite`;
-
-          console.log("Speed set to:", currentSpeed);
         });
       });
 
@@ -5012,7 +5049,7 @@
       }
 
       if (localStorage.getItem("blur_App_saved")) {
-        lp.style.filter = "blur(10px)";
+        lp.style.filter = "blur(20px)";
         document.getElementById("blurApp").classList.add("active");
       }
     </script>
@@ -5196,8 +5233,6 @@
 
         document.getElementById("size_icon_title").textContent = "Icon Size:";
         document.getElementById("dock_bar_title").textContent = "Dock Bar";
-        document.getElementById("abjvssawd").textContent =
-          "TikTok: @sungsamtech - galaxyA15❤️";
         document.getElementById("dark_mode_title").textContent = "Dark Mode";
         document.getElementById("icon_packs_title").textContent = "Icon Packs";
         document.getElementById("icon_packs_small_title").textContent =
@@ -5213,6 +5248,8 @@
           "Notification Center";
       }
 
+      document.getElementById("abjvssawd").textContent =
+        "TikTok: @sungsamtech - galaxyA15";
       target.innerText += "\u2764\uFE0F";
 
       function vi_language() {
