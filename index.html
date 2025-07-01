@@ -1962,7 +1962,7 @@
   <body>
     <div id="loading-screen">
       <div class="spinner"></div>
-      <p>Loading OriginOS V1.2.60</p>
+      <p>Loading OriginOS V1.2.70</p>
       <p>by: Quandz24</p>
       <p id="lolhaha">tiktok: @sungsamtech - @._naq.</p>
     </div>
@@ -2146,7 +2146,7 @@
               <div class="back-button" id="back_to_setting">About</div>
               <div class="khaysetting1-1">
                 <div class="left-text" id="Vesion">Vesion</div>
-                <div class="left-text-small">V1.2.60</div>
+                <div class="left-text-small">V1.2.70</div>
               </div>
               <div class="khaysetting1-2" id="khaysetting1-2">
                 <div class="left-text" id="Develop">Develop</div>
@@ -2185,6 +2185,12 @@
                     <p>New animation faster<br />Fixed bug Language</p>
                   </div>
                 </div>
+                <div class="vesion_text" style="top: 555px">
+                  <div class="content-box-vesion" style="height: 60px">
+                    <h2>Version 1.2.70</h2>
+                    <p>???</p>
+                  </div>
+                </div>
               </div>
               <div
                 class="app4credits"
@@ -2216,7 +2222,7 @@
                   @toi.daylabo2015
                 </div>
               </div>
-              <div class="originos"></div>
+              <div class="originos" id="clickBox_beta"></div>
             </div>
             <div
               class="app4animation"
@@ -3213,12 +3219,10 @@
         deltaY = 0;
         deltaX = 0;
 
-      
-          clearTimeout(hideBlur);
-          lp.style.transition = `all 0s`;
-          lp.classList.add("open");
-          hideBlur = null;
-        
+        clearTimeout(hideBlur);
+        lp.style.transition = `all 0s`;
+        lp.classList.add("open");
+        hideBlur = null;
 
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
@@ -3278,12 +3282,11 @@
         startY = e.clientY;
         startX = e.clientX;
 
-      
-          clearTimeout(hideBlur);
-          lp.style.transition = `all 0s`;
-          lp.classList.add("open");
-          hideBlur = null;
-        
+        clearTimeout(hideBlur);
+        lp.style.transition = `all 0s`;
+        lp.classList.add("open");
+        hideBlur = null;
+
         if (currentOpeningBtn === boxes["box4"]) {
           theme_option.style.pointerEvents = "auto";
           animationInSetting.style.pointerEvents = "auto";
@@ -4871,7 +4874,6 @@
           }, 10000);
         }, 300);
       }, 5000); // 5 giây
-
       if (localStorage.getItem("savedWallpaper")) {
         wallpaper.style.backgroundImage = `url(${localStorage.getItem(
           "savedWallpaper"
@@ -6051,6 +6053,20 @@
       else if (localStorage.getItem("language") == "ru") ru_language();
       else if (localStorage.getItem("language") == "it") it_language();
       else if (localStorage.getItem("language") === "ar") ar_language();
+
+      let clickCount_beta = 0;
+      const box_beta = document.getElementById("clickBox_beta");
+
+      box_beta.addEventListener("click", () => {
+        clickCount_beta++;
+
+        if (clickCount_beta === 7) {
+          clickCount_beta = 0;
+          window.location.href = "./bt/index.html";
+        }
+
+        setTimeout(() => (clickCount_beta = 0), 1000);
+      });
     </script>
   </body>
 </html>
