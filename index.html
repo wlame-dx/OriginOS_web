@@ -6053,34 +6053,34 @@
       else if (localStorage.getItem("language") == "ru") ru_language();
       else if (localStorage.getItem("language") == "it") it_language();
       else if (localStorage.getItem("language") === "ar") ar_language();
-
+    </script>
+ <script>
       let clickCount_beta = 0;
-let clickTimer_beta;
+      let clickTimer_beta;
 
-const box_beta = document.getElementById("clickBox_beta");
+      const box_beta = document.getElementById("clickBox_beta");
 
-box_beta.addEventListener("click", () => {
-  clickCount_beta++;
+      box_beta.addEventListener("click", () => {
+        clickCount_beta++;
 
-  clearTimeout(clickTimer_beta);
-  clickTimer_beta = setTimeout(() => {
-    clickCount_beta = 0;
-  }, 1500); // Reset sau 1.5s
+        clearTimeout(clickTimer_beta);
+        clickTimer_beta = setTimeout(() => {
+          clickCount_beta = 0;
+        }, 1500); // Reset nếu không bấm tiếp
 
-  if (clickCount_beta >= 2) {
-    const k = 7 - clickCount_beta;
-    tb_system(`Press ${k} more times to open beta`);
-  }
+        if (clickCount_beta >= 2) {
+          const k = 7 - clickCount_beta;
+          tb_system(`Press ${k} more times to open beta`);
+        }
 
-  if (clickCount_beta === 7) {
-    clickCount_beta = 0;
-    window.open(
-      "https://quandz24-ui.github.io/OriginOS_web/bt/index.html",
-      "_blank"
-    );
-  }
-});
-
+        if (clickCount_beta === 7) {
+          clickCount_beta = 0;
+          const newTab = window.open(
+            "https://quandz24-ui.github.io/OriginOS_web/bt/index.html",
+            "_blank"
+          );
+        }
+      });
     </script>
   </body>
 </html>
