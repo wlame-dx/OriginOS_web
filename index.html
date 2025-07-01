@@ -6055,18 +6055,32 @@
       else if (localStorage.getItem("language") === "ar") ar_language();
 
       let clickCount_beta = 0;
-      const box_beta = document.getElementById("clickBox_beta");
+let clickTimer_beta;
 
-      box_beta.addEventListener("click", () => {
-        clickCount_beta++;
+const box_beta = document.getElementById("clickBox_beta");
 
-        if (clickCount_beta === 7) {
-          clickCount_beta = 0;
-          window.location.href = "https://quandz24-ui.github.io/OriginOS_web/bt/index.html";
-        }
+box_beta.addEventListener("click", () => {
+  clickCount_beta++;
 
-        setTimeout(() => (clickCount_beta = 0), 1000);
-      });
+  clearTimeout(clickTimer_beta);
+  clickTimer_beta = setTimeout(() => {
+    clickCount_beta = 0;
+  }, 1500); // Reset sau 1.5s
+
+  if (clickCount_beta >= 2) {
+    const k = 7 - clickCount_beta;
+    tb_system(`Press ${k} more times to open beta`);
+  }
+
+  if (clickCount_beta === 7) {
+    clickCount_beta = 0;
+    window.open(
+      "https://quandz24-ui.github.io/OriginOS_web/bt/index.html",
+      "_blank"
+    );
+  }
+});
+
     </script>
   </body>
 </html>
