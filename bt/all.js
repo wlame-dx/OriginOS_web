@@ -2958,3 +2958,9 @@ if ("getBattery" in navigator) {
     );
   });
 }
+
+const box_beta = document.getElementById('clickBox_beta');
+
+box_beta.addEventListener('click', () => {
+  tb_system("You're already in beta");
+});
