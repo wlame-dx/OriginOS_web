@@ -185,6 +185,8 @@ const scale = 1;
 let hide_app = null;
 function closePopup() {
   if (!currentOpeningBtn) return;
+  updateActionsMap();
+
   app.classList.remove("open");
   currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed5}s cubic-bezier(.43,.25,.58,.67), height ${currentSpeed4}s`;
   clearTimeout(autoHideClickablesTimer);
@@ -1237,7 +1239,7 @@ unlockBtn.addEventListener("pointerdown", () => {
     unlock();
     animation.stop();
     animation.play();
-  }, 200);
+  }, time_unlock_finger);
 });
 unlockBtn.addEventListener("pointerup", () => {
   clearTimeout(unlock_time);
@@ -1591,6 +1593,7 @@ lock_style_btn.addEventListener("click", () => {
   AboutInSetting.style.pointerEvents = "none";
 
   add_pass_events();
+  addSettingsListeners_finger_pass();
 });
 back13.addEventListener("click", () => {
   hidePopup_open_close(app4_lock_style);
@@ -1600,7 +1603,82 @@ back13.addEventListener("click", () => {
   AboutInSetting.style.pointerEvents = "auto";
 
   remove_pass_events();
+  removeSettingsListeners_finger_pass();
 });
+
+let time_unlock_finger = 100;
+let finger_fast = 0;
+let transparent_password = 0;
+
+// --- Hàm xử lý sự kiện ---
+function onFastFingerClick(event) {
+  const btn = event.target;
+  btn.classList.toggle("active");
+  finger_fast = btn.classList.contains("active") ? 1 : 0;
+  time_unlock_finger = finger_fast ? 0 : 100;
+  localStorage.setItem("fast_finger", finger_fast);
+}
+
+function onTransparentPasswordClick(event) {
+  const btn = event.target;
+  btn.classList.toggle("active");
+  transparent_password = btn.classList.contains("active") ? 1 : 0;
+  localStorage.setItem("transparent_password", transparent_password);
+
+  document.querySelectorAll(".key_password").forEach((el) => {
+    el.style.background = transparent_password ? "#ffffff00" : "#ffffff50";
+  });
+}
+
+// --- Thêm sự kiện ---
+function addSettingsListeners_finger_pass() {
+  document
+    .getElementById("fast_finger")
+    .addEventListener("click", onFastFingerClick);
+  document
+    .getElementById("transparent_password")
+    .addEventListener("click", onTransparentPasswordClick);
+}
+
+// --- Gỡ sự kiện ---
+function removeSettingsListeners_finger_pass() {
+  document
+    .getElementById("fast_finger")
+    .removeEventListener("click", onFastFingerClick);
+  document
+    .getElementById("transparent_password")
+    .removeEventListener("click", onTransparentPasswordClick);
+}
+
+// --- Phục hồi trạng thái từ localStorage ---
+function restoreSettings_finger_pass() {
+  finger_fast = parseInt(localStorage.getItem("fast_finger")) || 0;
+  transparent_password =
+    parseInt(localStorage.getItem("transparent_password")) || 0;
+
+  const fastBtn = document.getElementById("fast_finger");
+  const transBtn = document.getElementById("transparent_password");
+
+  if (finger_fast) {
+    fastBtn.classList.add("active");
+    time_unlock_finger = 0;
+  } else {
+    fastBtn.classList.remove("active");
+    time_unlock_finger = 100;
+  }
+
+  if (transparent_password) {
+    transBtn.classList.add("active");
+    document.querySelectorAll(".key_password").forEach((el) => {
+      el.style.background = "#ffffff00";
+    });
+  } else {
+    transBtn.classList.remove("active");
+    document.querySelectorAll(".key_password").forEach((el) => {
+      el.style.background = "#ffffff50";
+    });
+  }
+}
 
 language_btn.addEventListener("click", () => {
   showPopup_open_close(app4_language);
@@ -1642,6 +1720,10 @@ function handleBoxPass2() {
     status_pass2.textContent = box_pass2.classList.contains("off")
       ? "OFF"
       : "ON";
+
+    finger_icon_btn.style.fill = box_pass2.classList.contains("off")
+      ? "#000000"
+      : "#ffffff";
     finger_biometrics = box_pass2.classList.contains("off") ? 0 : 1;
     localStorage.setItem("finger_saved", finger_biometrics.toString());
   } else tb_system("create password first");
@@ -2123,7 +2205,7 @@ function handleDarkModeToggle() {
   dark_mode = this.classList.contains("active") ? 1 : 0;
 
   localStorage.setItem("dark_mode_saved", dark_mode);
-  if (!dark_mode) localStorage.removeItem("dark_mode_saved");
+  if (dark_mode == 0) localStorage.removeItem("dark_mode_saved");
 
   set_dark_mode(dark_mode);
 }
@@ -2470,13 +2552,11 @@ function hideIconPopup() {
   hidePopup_open_close(app4_icon);
 }
 
-// ==-- ICON PACK --==
-icon_originos();
+// ==-- ICON PACK FUNCTIONS WITH LOCALSTORAGE --==
+
 function icon_originos() {
-  document.querySelectorAll(".box_icon").forEach((el) => {
-    el.style.border = "2px solid gray";
-  });
-  document.getElementById("originos_icon").style.border = "2px solid aqua";
+  localStorage.setItem("selected_icon_pack", "originos");
+  updateIconBorder("originos_icon");
   document.documentElement.style.setProperty("--bg-size_img", "105%");
 
   setIconAndBackgroundGradient(".box1", "originos_data/system_calculator.png");
@@ -2492,10 +2572,8 @@ function icon_originos() {
 }
 
 function icon_hyperos() {
-  document.querySelectorAll(".box_icon").forEach((el) => {
-    el.style.border = "2px solid gray";
-  });
-  document.getElementById("hyperos_icon").style.border = "2px solid aqua";
+  localStorage.setItem("selected_icon_pack", "hyperos");
+  updateIconBorder("hyperos_icon");
   document.documentElement.style.setProperty("--bg-size_img", "115%");
 
   setIconAndBackgroundGradient2(
@@ -2541,10 +2619,8 @@ function icon_hyperos() {
 }
 
 function icon_ios() {
-  document.querySelectorAll(".box_icon").forEach((el) => {
-    el.style.border = "2px solid gray";
-  });
-  document.getElementById("ios_icon").style.border = "2px solid aqua";
+  localStorage.setItem("selected_icon_pack", "ios");
+  updateIconBorder("ios_icon");
   document.documentElement.style.setProperty("--bg-size_img", "115%");
 
   setIconAndBackgroundGradient(".box1", "originos_data/i_icon/calculator.png");
@@ -2560,10 +2636,8 @@ function icon_ios() {
 }
 
 function icon_coloros() {
-  document.querySelectorAll(".box_icon").forEach((el) => {
-    el.style.border = "2px solid gray";
-  });
-  document.getElementById("coloros_icon").style.border = "2px solid aqua";
+  localStorage.setItem("selected_icon_pack", "coloros");
+  updateIconBorder("coloros_icon");
   document.documentElement.style.setProperty("--bg-size_img", "100%");
 
   setIconAndBackgroundGradient(".box1", "originos_data/o_icon/calculator.png");
@@ -2576,6 +2650,24 @@ function icon_coloros() {
   setIconAndBackgroundGradient(".box8", "originos_data/o_icon/phone.png");
   setIconAndBackgroundGradient(".box9", "originos_data/o_icon/clock.png");
   setIconAndBackgroundGradient(".box10", "originos_data/o_icon/compass.png");
+}
+
+// -- Shared helper to update border --
+function updateIconBorder(activeId) {
+  document.querySelectorAll(".box_icon").forEach((el) => {
+    el.style.border = "2px solid gray";
+  });
+  const active = document.getElementById(activeId);
+  if (active) active.style.border = "2px solid aqua";
+}
+
+// -- Restore icon pack when loading --
+function restoreIconPack() {
+  const pack = localStorage.getItem("selected_icon_pack");
+  if (pack === "originos") icon_originos();
+  else if (pack === "hyperos") icon_hyperos();
+  else if (pack === "ios") icon_ios();
+  else if (pack === "coloros") icon_coloros();
 }
 
 const root = document.documentElement;
@@ -2958,9 +3050,3 @@ if ("getBattery" in navigator) {
     );
   });
 }
-
-const box_beta = document.getElementById('clickBox_beta');
-
-box_beta.addEventListener('click', () => {
-  tb_system("You're already in beta");
-});

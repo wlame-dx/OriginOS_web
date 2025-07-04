@@ -1,4 +1,3 @@
-en_language();
 // ... thêm các ngôn ngữ khác nếu có
 function filterLanguages() {
   const query = document
@@ -22,6 +21,7 @@ function selectLanguage(btn) {
   btn.classList.add("selected_language");
 }
 function en_language() {
+  setLanguage("en");
   localStorage.setItem("language", "en");
 
   document.getElementById("name_setting").textContent = "Settings";
@@ -90,6 +90,7 @@ function en_language() {
 target.innerText += "\u2764\uFE0F";
 
 function vi_language() {
+  setLanguage("vi");
   localStorage.removeItem("language");
   localStorage.setItem("language", "vi");
 
@@ -790,10 +791,4 @@ function ph_language() {
 
   document.getElementById("left-text-tb").textContent = "Notification Center"; // Giữ nguyên "notification center" nhưng viết hoa đầu từ
 }
-const lang = localStorage.getItem("language");
-
-if (localStorage.getItem("language") == "vi") vi_language();
-else if (localStorage.getItem("language") == "en") en_language();
-else if (localStorage.getItem("language") == "ru") ru_language();
-else if (localStorage.getItem("language") == "it") it_language();
-else if (localStorage.getItem("language") === "ar") ar_language();
+en_language();

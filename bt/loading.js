@@ -22,7 +22,7 @@ setTimeout(() => {
       }
     }, 10000);
   }, 300);
-}, 1000); // 5 giây
+}, 0); // 5 giây
 
 setTimeout(() => {
   if (localStorage.getItem("hide_wallpaper_saved")) {
@@ -181,11 +181,10 @@ setTimeout(() => {
   }
 
   if (localStorage.getItem("dark_mode_saved")) {
-    set_dark_mode(localStorage.getItem("dark_mode_saved"));
-
     document.getElementById("dark-mode").classList.add("active");
     dark_mode = 1;
-  }
+    set_dark_mode(localStorage.getItem("dark_mode_saved"));
+  } else set_dark_mode(0);
 
   if (localStorage.getItem("savedWallpaper")) {
     wallpaper.style.backgroundImage = `url(${localStorage.getItem(
@@ -205,4 +204,9 @@ setTimeout(() => {
       el.classList.remove("active");
     });
   }
+
+  en_language();
 }, 300);
+
+restoreSettings_finger_pass();
+restoreIconPack();

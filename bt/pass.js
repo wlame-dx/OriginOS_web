@@ -3,6 +3,48 @@ let input_password = "";
 const saved_pass_local = localStorage.getItem("pass_saved");
 if (saved_pass_local) pass_password = saved_pass_local;
 
+const translations = {
+  en: {
+    create_new: "Create new password",
+    enter_old: "Enter old password",
+    confirm_new: "Confirm new password",
+    wrong_old: "Incorrect old password",
+    not_match: "Passwords do not match",
+    remove_success: "Password removed successfully",
+    forgot: "Forgot password",
+  },
+  vi: {
+    create_new: "Tạo mật mã mới",
+    enter_old: "Nhập mật mã cũ",
+    confirm_new: "Xác nhận lại mật mã mới",
+    wrong_old: "Mật mã cũ sai",
+    not_match: "Mật mã xác nhận không khớp",
+    remove_success: "Đã xóa mật khẩu thành công",
+    forgot: "Quên mật mã",
+  },
+  // ... Thêm ngôn ngữ khác
+};
+let currentLang = localStorage.getItem("language") || "vi"; // mặc định tiếng Việt
+function t(key) {
+  return translations[currentLang]?.[key] || key;
+}
+function updatePasswordTexts() {
+  document.getElementById("title_crea_pass").textContent =
+    stage_crea_pass === 0
+      ? t("enter_old")
+      : stage_crea_pass === 1
+      ? t("create_new")
+      : t("confirm_new");
+
+  document.getElementById("error_crea_pass").textContent = "";
+  fogot_pass_btn.textContent = t("forgot");
+}
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("language", lang);
+  updatePasswordTexts();
+}
+
 if (pass_password === "") {
   box_pass1.classList.add("off");
   box_pass2.classList.add("off");
@@ -105,9 +147,9 @@ function addNumber_password(num) {
         updateDots_password();
       }, 200);
 
-      if (failCount_password >= 3) {
-        onThreeFails(); // gọi hàm riêng khi sai 3 lần
-        failCount_password = 0; // reset nếu cần
+      if (failCount_password >= 2) {
+        onThreeFails();
+        failCount_password = 0;
       }
     }
   }
@@ -126,7 +168,7 @@ function onThreeFails() {
     input_crea_pass = "";
     newPass_crea_pass = "";
     document.getElementById("title_crea_pass").textContent =
-      pass_password === "" ? "Tạo mật mã mới" : "Nhập mật mã cũ";
+      pass_password === "" ? t("create_new") : t("enter_old");
     document.getElementById("error_crea_pass").textContent = "";
     updateDots_crea_pass();
     hidePopup_open_close(crea_pass);
@@ -297,7 +339,7 @@ let newPass_crea_pass = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("title_crea_pass").textContent =
-    pass_password === "" ? "Tạo mật mã mới" : "Nhập mật mã cũ";
+    pass_password === "" ? t("create_new") : t("enter_old");
 });
 
 function updateDots_crea_pass() {
@@ -326,7 +368,7 @@ function deleteKey_crea_pass() {
     input_crea_pass = "";
     newPass_crea_pass = "";
     document.getElementById("title_crea_pass").textContent =
-      pass_password === "" ? "Tạo mật mã mới" : "Nhập mật mã cũ";
+      pass_password === "" ? t("create_new") : t("enter_old");
     document.getElementById("error_crea_pass").textContent = "";
     updateDots_crea_pass();
     hidePopup_open_close(crea_pass);
@@ -344,16 +386,15 @@ function handleFullInput_crea_pass() {
   if (stage_crea_pass === 0) {
     if (input_crea_pass === pass_password) {
       stage_crea_pass = 1;
-      document.getElementById("title_crea_pass").textContent = "Tạo mật mã mới";
+      document.getElementById("title_crea_pass").textContent = t("create_new");
       remove_pass_btn.style.display = "block";
     } else {
-      errorEl.textContent = "Mật mã cũ sai";
+      errorEl.textContent = t("wrong_old");
     }
   } else if (stage_crea_pass === 1) {
     newPass_crea_pass = input_crea_pass;
     stage_crea_pass = 2;
-    document.getElementById("title_crea_pass").textContent =
-      "Xác nhận lại mật mã mới";
+    document.getElementById("title_crea_pass").textContent = t("confirm_new");
   } else if (stage_crea_pass === 2) {
     if (input_crea_pass === newPass_crea_pass) {
       pass_password = newPass_crea_pass;
@@ -361,15 +402,16 @@ function handleFullInput_crea_pass() {
       localStorage.setItem("pass_saved", pass_password);
       remove_pass_btn.style.display = "none";
       box_pass1.classList.remove("off");
+      pass_icon_btn.style.fill = "#ffffff";
       stage_crea_pass = 0;
-      document.getElementById("title_crea_pass").textContent = "Nhập mật mã cũ";
+      document.getElementById("title_crea_pass").textContent = t("enter_old");
       status_pass1.textContent = box_pass1.classList.contains("off")
         ? "OFF"
         : "ON";
     } else {
-      errorEl.textContent = "Mật mã xác nhận không khớp";
+      errorEl.textContent = t("not_match");
       stage_crea_pass = 1;
-      document.getElementById("title_crea_pass").textContent = "Tạo mật mã mới";
+      document.getElementById("title_crea_pass").textContent = t("create_new");
     }
   }
 
@@ -384,7 +426,7 @@ remove_pass_btn.addEventListener("click", () => {
   input_crea_pass = "";
   newPass_crea_pass = "";
   document.getElementById("title_crea_pass").textContent =
-    pass_password === "" ? "Tạo mật mã mới" : "Nhập mật mã cũ";
+    pass_password === "" ? t("create_new") : t("enter_old");
   document.getElementById("error_crea_pass").textContent = "";
   updateDots_crea_pass();
   hidePopup_open_close(crea_pass);
