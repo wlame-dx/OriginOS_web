@@ -184,7 +184,11 @@ setTimeout(() => {
     document.getElementById("dark-mode").classList.add("active");
     dark_mode = 1;
     set_dark_mode(localStorage.getItem("dark_mode_saved"));
-  } else set_dark_mode(0);
+  } else {
+    set_dark_mode(0);
+    dark_mode = 0;
+    document.getElementById("dark-mode").classList.remove("active");
+  }
 
   if (localStorage.getItem("savedWallpaper")) {
     wallpaper.style.backgroundImage = `url(${localStorage.getItem(

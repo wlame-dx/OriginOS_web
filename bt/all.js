@@ -141,8 +141,8 @@ function hideAllClickables() {
 function openPopupFromCurrentButton() {
   if (!currentOpeningBtn) return;
   thanh.classList.add("open");
-  if (app) app.classList.add("open");
-  currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.26,.72,.33,.89), height ${currentSpeed5}s cubic-bezier(.31,.9,1,1), top ${currentSpeed5}s cubic-bezier(.18,.55,.29,.78)`;
+  if (app) showPopup_open_close(app);
+  currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(0.25, 0.46, 0.29, 0.97), height ${currentSpeed5}s cubic-bezier(.31,.9,1,1), top ${currentSpeed5}s cubic-bezier(.18,.55,.29,.78)`;
 
   allApp.style.transition =
     wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
@@ -151,7 +151,6 @@ function openPopupFromCurrentButton() {
   wallpaper.style.scale = `110%`;
 
   currentOpeningBtn.classList.add("open");
-  currentOpeningBtn.classList.add("hien");
   currentOpeningBtn.style.scale = "100%";
   currentOpeningBtn.style.zIndex = "320";
 
@@ -159,11 +158,9 @@ function openPopupFromCurrentButton() {
   lp.classList.add("open");
 
   scale_app = setTimeout(() => {
-    currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.077)`;
+    currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.1628)`;
   }, 50);
 
-  clearTimeout(hide_app);
-  app.style.display = "flex";
   allApp.classList.add("open");
 
   const boxId = Object.keys(boxes).find(
@@ -185,10 +182,9 @@ const scale = 1;
 let hide_app = null;
 function closePopup() {
   if (!currentOpeningBtn) return;
-  updateActionsMap();
+  hidePopup_open_close(app);
 
-  app.classList.remove("open");
-  currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed5}s cubic-bezier(.43,.25,.58,.67), height ${currentSpeed4}s`;
+  currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed5}s cubic-bezier(0.25, 0.46, 0.29, 0.97), height ${currentSpeed4}s`;
   clearTimeout(autoHideClickablesTimer);
   closing = true;
   setTimeout(() => {
@@ -209,10 +205,6 @@ function closePopup() {
 
   lp.style.transition = `all ${currentSpeed5}s cubic-bezier(0.2, 0.2, 0.12, 1)`;
   lp.classList.remove("open");
-
-  hide_app = setTimeout(() => {
-    app.style.display = "none";
-  }, currentSpeed5 * 1000);
 
   allApp.classList.remove("open");
 
@@ -241,7 +233,7 @@ function updateTransform(y, x) {
   const ratio = easedY / maxEasedY;
   const displayY = ratio * 170;
   if (displayY > 100) displayY = 100;
-  const scale = 1 - y / 200 + 0.074;
+  const scale = 1.1628 - y / 200;
 
   currentOpeningBtn.style.transition = `all 0.1s`;
   currentOpeningBtn.style.transform = `translateX(${x}px) translateY(${-displayY}px) scale(${scale})`;
@@ -253,7 +245,7 @@ function updateTransform(y, x) {
 function resetpop() {
   thanh.classList.add("open");
   currentOpeningBtn.style.transition = `all ${currentSpeed3}s`;
-  currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.077)`;
+  currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.1628)`;
   thanh.style.transform = `translateX(-50%) translateY(0%) scale(1)`;
 }
 
@@ -409,7 +401,7 @@ function openPopupFromCurrentButton2() {
   lp.classList.add("open");
 
   setTimeout(() => {
-    currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.077)`;
+    currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.1628)`;
   }, 50);
 
   clearTimeout(hide_app);
@@ -461,7 +453,7 @@ const handlers = {
     Object.assign(island2.style, {
       height: "25px",
       borderRadius: "25px",
-      width: "120px",
+      width: "25px",
     });
 
     image_island_right2.classList.remove("show");
@@ -487,7 +479,7 @@ const handlers = {
         clearTimeout(autoHideClickablesTimer);
         clearTimeout(scale_app);
         if (currentOpeningBtn) {
-          currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.26,.89,.7,1.01)`;
+          currentOpeningBtn.style.transition = `all ${currentSpeed6}s cubic-bezier(.26,.89,.7,1.01)`;
           currentOpeningBtn.classList.remove("open");
           currentOpeningBtn.classList.remove("hien");
           currentOpeningBtn.style.scale = `${scale_icon}%`;
@@ -645,8 +637,9 @@ clickables["box9"].addEventListener("pointerup", () => {
 
 function closePopupToIsland() {
   if (!currentOpeningBtn) return;
-  app.classList.remove("open");
-  currentOpeningBtn.style.transition = `all ${currentSpeed3}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
+  hidePopup_open_close(app);
+  currentOpeningBtn.style.transition = `all ${currentSpeed2}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
+  boxes["box9"].classList.add("open");
   clearTimeout(autoHideClickablesTimer);
   clearTimeout(timeHideIsland);
 
@@ -662,10 +655,6 @@ function closePopupToIsland() {
 
   lp.style.transition = `all ${currentSpeed5}s cubic-bezier(0.2, 0.2, 0.12, 1)`;
   lp.classList.remove("open");
-
-  hide_app = setTimeout(() => {
-    app.style.display = "none";
-  }, currentSpeed5 * 1000);
 
   allApp.classList.remove("open");
 
@@ -840,6 +829,8 @@ document.addEventListener("pointerdown", function (e) {
         if (!isPlaying_music) {
           island2.style.transition = `all 0.3s`;
           island2.style.width = "25px";
+          island_circle.style.transition =
+            "all 0.7s cubic-bezier(.67,.2,.38,1.27)";
           island_circle.style.transform = "translateX(-50%) scale(1)";
         } else {
           island_circle.style.transform =
@@ -858,6 +849,7 @@ document.addEventListener("pointerdown", function (e) {
 
 clickables["box3"].addEventListener("pointerup", () => {
   if (isRunning_clock) {
+    island_circle.style.transition = "all 0.7s cubic-bezier(.67,.2,.38,1.27)";
     island_circle.style.transform = "translateX(-50%) scale(1)";
 
     clock.style.transition = "all 0.6s cubic-bezier(.67,.2,.38,1.27)";
@@ -960,6 +952,56 @@ function closePopupToIsland3() {
       island_circle.style.transform = "translateX(calc(-50% - 77px)) scale(1)";
     }
   }, 300 * currentSpeed);
+}
+
+function open_all_island() {
+  if (isRunning_clock) {
+    island.style.height = "25px";
+    island.style.borderRadius = "25px";
+    island.style.width = "120px";
+    buttons_island.classList.remove("show");
+    time_island.classList.remove("show");
+    image_island_right.classList.add("show");
+  }
+
+  if (isPlaying_music) {
+    island2.style.transition = `all 0.35s ease-out, width 0.7s cubic-bezier(.14,1.34,.41,1)`;
+    island2.style.width = "120px";
+    image_island_right2.classList.remove("show");
+    controls_music2.classList.remove("show");
+    popupAuthor_music2.classList.remove("show");
+    popupTitle_music2.classList.remove("show");
+    progressBar_music2.classList.remove("show");
+  }
+
+  if (isPlaying_music && isRunning_clock) {
+    island2.style.transition = `all 0.2s`;
+    island2.style.width = "25px";
+    island.style.transition = `all 0.35s ease-out, width 0.7s cubic-bezier(.62,0,.25,1.36)`;
+    island.style.width = "120px";
+    island_circle.style.transition = "all 0.7s cubic-bezier(.67,.2,.38,1.27)";
+    island_circle.style.transform = "translateX(calc(-50% - 77px)) scale(1)";
+    island2.style.transform = "translateX(-50%) translateY(0px) scale(1)";
+    clickables["box3"].style.pointerEvents = "auto";
+    clock.style.transition = "all 0.6s cubic-bezier(.67,.2,.38,1.27)";
+    clock.style.scale = "0.8";
+    clock.style.left = "25px";
+  }
+}
+
+function close_all_island() {
+  island_circle.style.transition = "all 0.2s";
+  island_circle.style.transform = "translateX(-50%) scale(1)";
+
+  island.style.transition = `all 0.35s ease-out`;
+  island.style.height = "25px";
+  island.style.borderRadius = "25px";
+  island.style.width = "25px";
+
+  island2.style.transition = `all ${currentSpeed5}s ease-out`;
+  island2.style.height = "25px";
+  island2.style.borderRadius = "25px";
+  island2.style.width = "25px";
 }
 
 // DOM elements
@@ -1308,6 +1350,7 @@ powerbtn.addEventListener("click", () => {
     battery3.classList.add("close");
     thanhS1.style.pointerEvents = "none";
     closePopup_noanim();
+    if (!always_on_displays) close_all_island();
 
     island.style.pointerEvents = "none";
     island2.style.pointerEvents = "none";
@@ -1352,6 +1395,8 @@ powerbtn.addEventListener("click", () => {
     island.style.pointerEvents = "auto";
     island2.style.pointerEvents = "auto";
     island_circle.style.pointerEvents = "auto";
+
+    if (!always_on_displays) open_all_island();
   }
 
   footerText.classList.remove("shake-animate");
@@ -1472,17 +1517,14 @@ function showPopup_open_close(target) {
 
   const id = el.id;
 
-  // Nếu đang ẩn dở, huỷ setTimeout ẩn
   if (hideTimeouts_open_close[id]) {
     clearTimeout(hideTimeouts_open_close[id]);
     hideTimeouts_open_close[id] = null;
   }
 
-  // Tránh hiển thị lại nếu đã hiển thị rồi
   if (!el.classList.contains("open")) {
     el.style.display = "flex";
 
-    // Bắt đầu animation
     requestAnimationFrame(() => {
       el.classList.remove("close");
       el.classList.add("open");
@@ -1504,7 +1546,7 @@ function hidePopup_open_close(target) {
   hideTimeouts_open_close[id] = setTimeout(() => {
     el.style.display = "none";
     hideTimeouts_open_close[id] = null;
-  }, 500);
+  }, 400);
 }
 
 function hidePopup_open_close(target) {
@@ -2910,7 +2952,8 @@ function dongnotification() {
 }
 function closePopup_noanim() {
   if (!currentOpeningBtn) return;
-  app.classList.remove("open");
+  hidePopup_open_close(app);
+
   currentOpeningBtn.style.transition = `all 0s`;
   clearTimeout(autoHideClickablesTimer);
   closing = true;
@@ -2927,10 +2970,6 @@ function closePopup_noanim() {
   thanh.classList.remove("open");
   lp.classList.remove("open");
 
-  hide_app = setTimeout(() => {
-    app.style.display = "none";
-  }, 0);
-
   allApp.classList.remove("open");
 
   if (nav) {
@@ -2939,44 +2978,10 @@ function closePopup_noanim() {
   }
   isMo = false;
 
-  Object.values(clickables).forEach((el) => {
-    el.style.display = "block";
-  });
   currentOpeningBtn.classList.remove("hien");
   currentOpeningBtn = null;
 
-  if (isRunning_clock) {
-    island.style.height = "25px";
-    island.style.borderRadius = "25px";
-    island.style.width = "120px";
-    buttons_island.classList.remove("show");
-    time_island.classList.remove("show");
-    image_island_right.classList.add("show");
-  }
-
-  if (isPlaying_music) {
-    island2.style.transition = `all 0.35s ease-out, width 0.7s cubic-bezier(.14,1.34,.41,1)`;
-    island2.style.width = "120px";
-    image_island_right2.classList.remove("show");
-    controls_music2.classList.remove("show");
-    popupAuthor_music2.classList.remove("show");
-    popupTitle_music2.classList.remove("show");
-    progressBar_music2.classList.remove("show");
-  }
-
-  if (isPlaying_music && isRunning_clock) {
-    island2.style.transition = `all 0.2s`;
-    island2.style.width = "25px";
-    island.style.transition = `all 0.4s cubic-bezier(.68,.01,.62,.14)`;
-    island.style.width = "120px";
-    island_circle.style.transition = "all 0.7s cubic-bezier(.67,.2,.38,1.27)";
-    island_circle.style.transform = "translateX(calc(-50% - 77px)) scale(1)";
-    island2.style.transform = "translateX(-50%) translateY(0px) scale(1)";
-    clickables["box3"].style.pointerEvents = "auto";
-    clock.style.transition = "all 0.6s cubic-bezier(.67,.2,.38,1.27)";
-    clock.style.scale = "0.8";
-    clock.style.left = "25px";
-  }
+  open_all_island();
 }
 
 const speedBoxes = document.querySelectorAll(".speed-box");

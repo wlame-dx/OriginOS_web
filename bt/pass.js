@@ -24,7 +24,7 @@ const translations = {
   },
   // ... Thêm ngôn ngữ khác
 };
-let currentLang = localStorage.getItem("language") || "vi"; // mặc định tiếng Việt
+let currentLang = localStorage.getItem("language") || "en"; // mặc định tiếng Việt
 function t(key) {
   return translations[currentLang]?.[key] || key;
 }

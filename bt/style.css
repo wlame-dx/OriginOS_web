@@ -311,7 +311,7 @@ body::-webkit-scrollbar-thumb:hover {
   top: 0;
   left: -0px;
   border-radius: 50px;
-  transform: scale(1.077);
+  transform: scale(1.1628);
   scale: 100%;
 }
 
@@ -325,7 +325,7 @@ body::-webkit-scrollbar-thumb:hover {
   top: 0;
   right: -0px;
   border-radius: 50px;
-  transform: scale(1.077);
+  transform: scale(1.1628);
 }
 
 .box9.open,
@@ -338,7 +338,7 @@ body::-webkit-scrollbar-thumb:hover {
   top: 0;
   left: -0px;
   border-radius: 50px;
-  transform: scale(1.077);
+  transform: scale(1.1628);
 }
 .box11::before,
 .box10::before,
@@ -1033,7 +1033,7 @@ body::-webkit-scrollbar-thumb:hover {
   scale: 1;
 }
 .allApp.open {
-  transform: scale(0.93);
+  transform: scale(0.86);
 }
 .allApp.lock {
   transition: all 1.5s cubic-bezier(0.07, 1.33, 1, 1);
