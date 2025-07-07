@@ -1527,14 +1527,12 @@ function showPopup_open_close(target) {
     hideTimeouts_open_close[id] = null;
   }
 
-  if (!el.classList.contains("open")) {
-    el.style.display = "flex";
+  el.style.display = "flex";
 
-    requestAnimationFrame(() => {
-      el.classList.remove("close");
-      el.classList.add("open");
-    });
-  }
+  requestAnimationFrame(() => {
+    el.classList.remove("close");
+    el.classList.add("open");
+  });
 }
 
 target.innerText += "lax";
