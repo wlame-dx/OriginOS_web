@@ -635,6 +635,9 @@ clickables["box9"].addEventListener("pointerup", () => {
 
 function closePopupToIsland() {
   if (!currentOpeningBtn) return;
+
+  hidePopup_open_close(app);
+
   currentOpeningBtn.style.transition = `all ${currentSpeed2}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
   boxes["box9"].classList.add("open");
   clearTimeout(autoHideClickablesTimer);
@@ -689,8 +692,6 @@ function closePopupToIsland() {
   clickables["box9"].style.pointerEvents = "none";
 
   setTimeout(() => {
-    hidePopup_open_close(app);
-
     boxes["box9"].style.scale = `${scale_icon}%`;
     boxes["box9"].style.transition = "all 0s, opacity 0.3s";
     boxes["box9"].classList.remove("open");
@@ -872,6 +873,8 @@ clickables["box3"].addEventListener("pointerup", () => {
 
 function closePopupToIsland3() {
   if (!currentOpeningBtn) return;
+  hidePopup_open_close(app);
+
   currentOpeningBtn.style.transition = `all ${currentSpeed3}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
   clearTimeout(autoHideClickablesTimer);
   clearTimeout(timeHideIsland);
@@ -932,7 +935,6 @@ function closePopupToIsland3() {
   clickables["box3"].style.pointerEvents = "none";
 
   setTimeout(() => {
-    hidePopup_open_close(app);
     boxes["box3"].style.scale = `${scale_icon}%`;
     boxes["box3"].style.transition = "all 0s, opacity 0.3s";
     boxes["box3"].classList.remove("open");
