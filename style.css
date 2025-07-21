@@ -748,7 +748,6 @@ body::-webkit-scrollbar-thumb:hover {
   z-index: 633426;
   pointer-events: auto;
   scale: var(--bg--scale_phone);
-  transition: all 0.6s cubic-bezier(0.23, 0.55, 0.54, 0.97);
 }
 .power-button.hidden {
   pointer-events: none;
