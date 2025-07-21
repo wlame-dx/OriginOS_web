@@ -7,9 +7,56 @@ if (
   sessionStorage.clear();
   location.reload();
 }
+let home_wallpaper = "";
+let lock_wallpaper = "";
+
+initOriginDB(() => {
+  getData("lock_wallpaper", (value) => {
+    if (value) {
+      const wallpaper_preview2 = document.querySelector(".wallpaper-preview2");
+      const wallPaper2 = document.querySelector(".wallpaper2");
+      const wallpaper = document.querySelector(".wallpaper");
+
+      lock_wallpaper = value;
+      wallpaper.style.backgroundImage = `url(${value})`;
+      wallPaper2.style.backgroundImage = `url(${value})`;
+      wallpaper_preview2.style.backgroundImage = `url(${value})`;
+
+      console.log("✅ Đã lấy lock wallpaper");
+    } else {
+      console.warn("⚠️ lock_wallpaper không tồn tại trong DB");
+    }
+  });
+
+  getData("home_wallpaper", (value) => {
+    if (value) {
+      home_wallpaper = value;
+
+      const wallpaper_preview = document.querySelector(".wallpaper-preview");
+      wallpaper_preview.style.backgroundImage = `url(${value})`;
+      console.log("✅ Đã lấy home wallpaper");
+    }
+  });
+
+  getData("wallpaper_aod2_image", (value) => {
+    if (value) {
+      const wallpaper_aod2 = document.getElementById("wallpaper_aod2");
+
+      wallpaper_aod2.style.backgroundImage = `url('${value}')`;
+      console.log("✅ Đã lấy home wallpaper AOD 2");
+    }
+  });
+});
 
 const dateElement = document.getElementById("dateText");
 const dateElement2 = document.getElementById("dateText2");
+const root2 = document.documentElement;
+const border_radius_phone = getComputedStyle(root2)
+  .getPropertyValue("--bg--border_radius_phone")
+  .trim();
+
+let custom_text_lock_screen =
+  localStorage.getItem("custom_text_lock_screen") || "";
 
 const now = new Date();
 const options = {
@@ -19,10 +66,12 @@ const options = {
 };
 const formatted = now.toLocaleDateString("en-US", options);
 
-dateElement.textContent = formatted;
+dateElement.textContent = `${formatted} ${custom_text_lock_screen}`;
 dateElement2.textContent = formatted;
 document.getElementById("dateText3").textContent = formatted;
-document.getElementById("dateTextPreview").textContent = formatted;
+document.getElementById(
+  "dateTextPreview"
+).textContent = `${formatted} ${custom_text_lock_screen}`;
 
 function updateTime() {
   const now = new Date();
@@ -36,9 +85,6 @@ function updateTime2() {
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
-  document.getElementById(
-    "clock-aod-preview"
-  ).textContent = `${hours}:${minutes}`;
   document.getElementById(
     "lock-screen-preview"
   ).textContent = `${hours}:${minutes}`;
@@ -60,8 +106,6 @@ const boxes = {
   box9: document.getElementById("box9"),
   box10: document.getElementById("box10"),
   box11: document.getElementById("box11"),
-  box12: document.getElementById("box12"),
-  box13: document.getElementById("box13"),
 };
 
 boxes[`box1`].classList.add("lock");
@@ -75,6 +119,7 @@ boxes[`box8`].classList.add("lock");
 boxes[`box9`].classList.add("lock");
 boxes[`box10`].classList.add("lock");
 boxes[`box11`].classList.add("lock");
+
 document.querySelector(".khayapp").classList.add("lock");
 
 const appopen = {
@@ -89,8 +134,6 @@ const appopen = {
   box9: document.getElementById("app9"),
   box10: document.getElementById("app10"),
   box11: document.getElementById("app11"),
-  box12: document.getElementById("app12"),
-  box13: document.getElementById("app13"),
 };
 
 const clickables = {
@@ -105,8 +148,6 @@ const clickables = {
   box9: document.getElementById("clickableBox9"),
   box10: document.getElementById("clickableBox10"),
   box11: document.getElementById("clickableBox11"),
-  box12: document.getElementById("clickableBox12"),
-  box13: document.getElementById("clickableBox13"),
 };
 
 const thanh = document.getElementById("thanh");
@@ -147,7 +188,6 @@ function openPopupFromCurrentButton() {
   allApp.style.transition =
     wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
 
-  wallpaper.style.filter = "blur(5px)";
   wallpaper.style.scale = `110%`;
 
   currentOpeningBtn.classList.add("open");
@@ -184,7 +224,7 @@ function closePopup() {
   if (!currentOpeningBtn) return;
   hidePopup_open_close(app);
 
-  currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed5}s cubic-bezier(0.25, 0.46, 0.29, 0.97), height ${currentSpeed4}s`;
+  currentOpeningBtn.style.transition = `all ${currentSpeed4}s, transform ${currentSpeed6}s ease, height ${currentSpeed4}s`;
   clearTimeout(autoHideClickablesTimer);
   closing = true;
   setTimeout(() => {
@@ -196,7 +236,6 @@ function closePopup() {
   allApp.style.transition = `all ${currentSpeed5}s`;
   wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(.35,.04,.69,.94)`;
 
-  wallpaper.style.filter = "blur(0px)";
   wallpaper.style.scale = `100%`;
   currentOpeningBtn.style.zIndex = "5";
 
@@ -219,6 +258,32 @@ function closePopup() {
   });
   currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1)`;
   currentOpeningBtn.classList.remove("hien");
+
+  if (currentOpeningBtn === boxes["box4"]) {
+    document.getElementById("scaling-box").style.animation = "none";
+
+    theme_option.style.pointerEvents = "auto";
+    AboutInSetting.style.pointerEvents = "auto";
+    animationInSetting.style.pointerEvents = "auto";
+
+    removeAllUIEventListeners();
+
+    hidePopup_open_close_noanim(app4);
+    hidePopup_open_close_noanim(credits);
+    hidePopup_open_close_noanim(app4_vesion);
+    hidePopup_open_close_noanim(app4animation);
+    hidePopup_open_close_noanim(app4_theme);
+    hidePopup_open_close_noanim(app4_home);
+    hidePopup_open_close_noanim(wallpaper_option);
+    hidePopup_open_close_noanim(aod_option);
+    hidePopup_open_close_noanim(lock_option);
+    hidePopup_open_close_noanim(app4_finger);
+    hidePopup_open_close_noanim("app4icon");
+    hidePopup_open_close_noanim("app4audio");
+    hidePopup_open_close_noanim(app4_lock_style);
+    hidePopup_open_close_noanim(crea_pass);
+  }
+
   currentOpeningBtn = null;
 }
 
@@ -233,7 +298,7 @@ function updateTransform(y, x) {
   const ratio = easedY / maxEasedY;
   const displayY = ratio * 170;
   if (displayY > 100) displayY = 100;
-  const scale = 1.1628 - y / 350;
+  const scale = 1.1628 - y / 250;
 
   currentOpeningBtn.style.transition = `all 0.02s`;
   currentOpeningBtn.style.transform = `translateX(${x}px) translateY(${-displayY}px) scale(${scale})`;
@@ -277,31 +342,6 @@ thanh.addEventListener("touchstart", (e) => {
 
   deltaY = 0;
   deltaX = 0;
-
-  if (currentOpeningBtn === boxes["box4"]) {
-    document.getElementById("scaling-box").style.animation = "none";
-
-    theme_option.style.pointerEvents = "auto";
-    AboutInSetting.style.pointerEvents = "auto";
-    animationInSetting.style.pointerEvents = "auto";
-
-    removeAllUIEventListeners();
-
-    hidePopup_open_close(app4);
-    hidePopup_open_close(credits);
-    hidePopup_open_close(app4_vesion);
-    hidePopup_open_close(app4animation);
-    hidePopup_open_close(app4_theme);
-    hidePopup_open_close(app4_home);
-    hidePopup_open_close(wallpaper_option);
-    hidePopup_open_close(aod_option);
-    hidePopup_open_close(lock_option);
-    hidePopup_open_close(app4_finger);
-    hidePopup_open_close(app4icon);
-    hidePopup_open_close(app4language);
-    hidePopup_open_close(app4_lock_style);
-    hidePopup_open_close(crea_pass);
-  }
 });
 
 thanh.addEventListener(
@@ -328,6 +368,7 @@ thanh.addEventListener("touchend", () => {
 });
 
 thanh.addEventListener("mousedown", (e) => {
+  hideAllClickables();
   deltaY = 0;
   deltaX = 0;
   startY = 0;
@@ -337,31 +378,6 @@ thanh.addEventListener("mousedown", (e) => {
   dragging = true;
   startY = e.clientY;
   startX = e.clientX;
-
-  if (currentOpeningBtn === boxes["box4"]) {
-    document.getElementById("scaling-box").style.animation = "none";
-
-    theme_option.style.pointerEvents = "auto";
-    AboutInSetting.style.pointerEvents = "auto";
-    animationInSetting.style.pointerEvents = "auto";
-
-    removeAllUIEventListeners();
-
-    hidePopup_open_close(app4);
-    hidePopup_open_close(credits);
-    hidePopup_open_close(app4_vesion);
-    hidePopup_open_close(app4animation);
-    hidePopup_open_close(app4_theme);
-    hidePopup_open_close(app4_home);
-    hidePopup_open_close(wallpaper_option);
-    hidePopup_open_close(aod_option);
-    hidePopup_open_close(lock_option);
-    hidePopup_open_close(app4_finger);
-    hidePopup_open_close(app4icon);
-    hidePopup_open_close(app4language);
-    hidePopup_open_close(app4_lock_style);
-    hidePopup_open_close(crea_pass);
-  }
 });
 
 target.innerText += "@su";
@@ -389,7 +405,6 @@ function openPopupFromCurrentButton2() {
   allApp.style.transition =
     wallpaper.style.transition = `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
 
-  wallpaper.style.filter = "blur(5px)";
   wallpaper.style.scale = `110%`;
 
   currentOpeningBtn.classList.add("open");
@@ -400,9 +415,7 @@ function openPopupFromCurrentButton2() {
   lp.style.transition = `all ${currentSpeed3}s cubic-bezier(0.2, 0.2, 0.12, 1)`;
   lp.classList.add("open");
 
-  setTimeout(() => {
-    currentOpeningBtn.style.transform = `translateX(0%) translateY(0%) scale(1.1628)`;
-  }, 50);
+  currentOpeningBtn.style.transform = `scale(1.1628)`;
 
   allApp.classList.add("open");
 
@@ -469,60 +482,58 @@ const handlers = {
   },
 };
 
-["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"].forEach(
-  (num) => {
-    document
-      .getElementById(`clickableBox${num}`)
-      .addEventListener("pointerup", () => {
-        clearTimeout(autoHideClickablesTimer);
-        clearTimeout(scale_app);
-        if (currentOpeningBtn) {
-          currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.14,.56,.32,.8)`;
-          currentOpeningBtn.classList.remove("open");
-          currentOpeningBtn.classList.remove("hien");
-          currentOpeningBtn.style.scale = `${scale_icon}%`;
+["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"].forEach((num) => {
+  document
+    .getElementById(`clickableBox${num}`)
+    .addEventListener("pointerup", () => {
+      clearTimeout(autoHideClickablesTimer);
+      clearTimeout(scale_app);
+      if (currentOpeningBtn) {
+        currentOpeningBtn.style.transition = `all ${currentSpeed5}s cubic-bezier(.14,.56,.32,.8)`;
+        currentOpeningBtn.classList.remove("open");
+        currentOpeningBtn.classList.remove("hien");
+        currentOpeningBtn.style.scale = `${scale_icon}%`;
 
-          Object.values(clickables).forEach((el) => {
-            el.style.display = "block";
-          });
+        Object.values(clickables).forEach((el) => {
+          el.style.display = "block";
+        });
 
-          hidePopup_open_close(app);
-          app.style.display = "none";
-          app = appopen[`box${num}`];
+        hidePopup_open_close(app);
+        app.style.display = "none";
+        app = appopen[`box${num}`];
 
-          //lp.style.transition = "all 0.15s";
-          //lp.classList.remove("open");
+        //lp.style.transition = "all 0.15s";
+        //lp.classList.remove("open");
 
-          if (nav) nav.classList.remove("open");
+        if (nav) nav.classList.remove("open");
 
-          currentOpeningBtn.style.transform = `scale(1)`;
-          currentOpeningBtn.style.zIndex = "12";
+        currentOpeningBtn.style.transform = `scale(1)`;
+        currentOpeningBtn.style.zIndex = "12";
 
-          //lp.style.transition = "all 0.3s";
-          //WallPaper.classList.remove("open");
+        //lp.style.transition = "all 0.3s";
+        //WallPaper.classList.remove("open");
 
-          // Dùng 1 lần gọi duy nhất:
-          const handler = handlersMap.get(currentOpeningBtn);
-          if (handler) handler();
+        // Dùng 1 lần gọi duy nhất:
+        const handler = handlersMap.get(currentOpeningBtn);
+        if (handler) handler();
 
-          currentOpeningBtn = boxes[`box${num}`];
-          openPopupFromCurrentButton2();
-          autoHideClickablesTimer = setTimeout(() => {
-            if (isMo) hideAllClickables();
-          }, 500 * currentSpeed);
-        } else {
-          currentOpeningBtn = boxes[`box${num}`];
-          currentOpeningBtn.style.transition = `all ${currentSpeed5} cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-          app = appopen[`box${num}`];
-          app.style.display = "none";
-          openPopupFromCurrentButton();
-          autoHideClickablesTimer = setTimeout(() => {
-            if (isMo) hideAllClickables();
-          }, 500 * currentSpeed);
-        }
-      });
-  }
-);
+        currentOpeningBtn = boxes[`box${num}`];
+        openPopupFromCurrentButton2();
+        autoHideClickablesTimer = setTimeout(() => {
+          if (isMo) hideAllClickables();
+        }, 500 * currentSpeed);
+      } else {
+        currentOpeningBtn = boxes[`box${num}`];
+        currentOpeningBtn.style.transition = `all ${currentSpeed5} cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+        app = appopen[`box${num}`];
+        app.style.display = "none";
+        openPopupFromCurrentButton();
+        autoHideClickablesTimer = setTimeout(() => {
+          if (isMo) hideAllClickables();
+        }, 500 * currentSpeed);
+      }
+    });
+});
 
 target.innerText += "ngs";
 
@@ -538,9 +549,9 @@ island.addEventListener("click", () => {
     hideAllClickables();
     if (timeHideIsland) clearTimeout(timeHideIsland);
     island.style.transition = `all 0.56s cubic-bezier(.14,1.34,.41,1)`;
-    island.style.width = "310px";
+    island.style.width = "calc(var(--bg--size_width_phone) - 6%)";
     island.style.height = "75px";
-    island.style.borderRadius = "75px";
+    island.style.borderRadius = "calc(var(--bg--border_radius_phone) - 10px)";
     buttons_island.classList.add("show");
     time_island.classList.add("show");
     image_island_right.classList.remove("show");
@@ -637,16 +648,13 @@ function closePopupToIsland() {
   if (!currentOpeningBtn) return;
 
   hidePopup_open_close(app);
-
-  currentOpeningBtn.style.transition = `all ${currentSpeed2}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
-  boxes["box9"].classList.add("open");
+  currentOpeningBtn.style.transition = `all ${currentSpeed3}s, opacity ${currentSpeed2}s cubic-bezier(1,0,1,0.2)`;
   clearTimeout(autoHideClickablesTimer);
   clearTimeout(timeHideIsland);
 
   allApp.style.transition = `all ${currentSpeed5}s`;
   wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(.35,.04,.69,.94)`;
 
-  wallpaper.style.filter = "blur(0px)";
   wallpaper.style.scale = `100%`;
   currentOpeningBtn.style.zIndex = "5";
 
@@ -664,7 +672,9 @@ function closePopupToIsland() {
   }
   isMo = false;
   island.style.transition = `transform 0.3s, width 0.6s cubic-bezier(.67,.2,.38,1.27)`;
-  island.style.transform = "translateX(-50%) translateY(-1px) scale(1.15)";
+  document.querySelector(".camera").style.transform =
+    "translateX(-50%) translateY(-1px) scale(1.4)";
+  island.style.transform = "translateX(-50%) translateY(-1px) scale(1.4)";
   if (!isPlaying_music) {
     island.style.width = "120px";
   }
@@ -672,7 +682,7 @@ function closePopupToIsland() {
     island2.style.transition = "all 0.4s";
     island2.style.width = "25px";
     island2.style.transition = `transform 0.3s, width 0.6s cubic-bezier(.67,.2,.38,1.27)`;
-    island2.style.transform = "translateX(-50%) translateY(-1px) scale(1.15)";
+    island2.style.transform = "translateX(-50%) translateY(-1px) scale(1.4)";
     clickables["box3"].style.pointerEvents = "none";
   }
 
@@ -684,7 +694,8 @@ function closePopupToIsland() {
   Object.values(clickables).forEach((el) => {
     el.style.display = "block";
   });
-  boxes["box9"].style.transform = `translateY(-45%) scale(0.1)`;
+  boxes["box9"].style.transform = `translateY(-40%) scale(0.25)`;
+  boxes["box9"].classList.add("island_200");
   boxes["box9"].classList.remove("hien");
   boxes["box9"].style.opacity = 0;
   currentOpeningBtn = null;
@@ -694,12 +705,15 @@ function closePopupToIsland() {
   setTimeout(() => {
     boxes["box9"].style.scale = `${scale_icon}%`;
     boxes["box9"].style.transition = "all 0s, opacity 0.3s";
+    boxes["box9"].classList.remove("island_200");
     boxes["box9"].classList.remove("open");
     boxes["box9"].style.transform = `translateX(0%) translateY(0%) scale(1)`;
     boxes["box9"].style.opacity = 1;
 
     clickables["box9"].style.pointerEvents = "auto";
     island.style.transform = "translateX(-50%) translateY(0) scale(1)";
+    document.querySelector(".camera").style.transform =
+      "translateX(-50%) translateY(0px) scale(1)";
     if (isPlaying_music) {
       island2.style.transition = `transform 0.3s, width 1.2s cubic-bezier(1,-0.13,.27,1.34)`;
       island.style.width = "120px";
@@ -742,9 +756,9 @@ island_circle.addEventListener("click", () => {
   setTimeout(() => {
     if (timeHideIsland) clearTimeout(timeHideIsland);
     island2.style.transition = `all 0.56s cubic-bezier(.14,1.34,.41,1)`;
-    island2.style.width = "312px";
+    island2.style.width = "calc(var(--bg--size_width_phone) - 6%)";
     island2.style.height = "150px";
-    island2.style.borderRadius = "42px";
+    island2.style.borderRadius = "calc(var(--bg--border_radius_phone) - 10px)";
 
     image_island_right2.classList.add("show");
     controls_music2.classList.add("show");
@@ -764,9 +778,9 @@ island2.addEventListener("click", () => {
     hideAllClickables();
     if (timeHideIsland) clearTimeout(timeHideIsland);
     island2.style.transition = `all 0.56s cubic-bezier(.14,1.34,.41,1)`;
-    island2.style.width = "312px";
+    island2.style.width = "calc(var(--bg--size_width_phone) - 6%)";
     island2.style.height = "150px";
-    island2.style.borderRadius = "42px";
+    island2.style.borderRadius = "calc(var(--bg--border_radius_phone) - 10px)";
 
     image_island_right2.classList.add("show");
     controls_music2.classList.add("show");
@@ -882,7 +896,6 @@ function closePopupToIsland3() {
   allApp.style.transition = `all ${currentSpeed5}s`;
   wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(.35,.04,.69,.94)`;
 
-  wallpaper.style.filter = "blur(0px)";
   wallpaper.style.scale = `100%`;
   currentOpeningBtn.style.zIndex = "5";
 
@@ -900,13 +913,15 @@ function closePopupToIsland3() {
   }
   isMo = false;
 
-  island2.style.transform = "translateX(-50%) translateY(-1px) scale(1.15)";
+  document.querySelector(".camera").style.transform =
+    "translateX(-50%) translateY(-1px) scale(1.4)";
+  island2.style.transform = "translateX(-50%) translateY(-1px) scale(1.4)";
   if (isRunning_clock) {
     island2.style.transition = `all 0.3s`;
 
     island2.style.transform = "";
     island.style.transition = `transform 0.3s, width 0.6s cubic-bezier(.67,.2,.38,1.27)`;
-    island.style.transform = "translateX(-50%) translateY(-1px) scale(1.15)";
+    island.style.transform = "translateX(-50%) translateY(-1px) scale(1.4)";
     island.style.width = "80px";
     clickables["box9"].style.pointerEvents = "none";
 
@@ -927,7 +942,8 @@ function closePopupToIsland3() {
   Object.values(clickables).forEach((el) => {
     el.style.display = "block";
   });
-  boxes["box3"].style.transform = `translateY(-45%) scale(0.1)`;
+  boxes["box3"].style.transform = `translateY(-40%) scale(0.25)`;
+  boxes["box3"].classList.add("island_200");
   boxes["box3"].classList.remove("hien");
   boxes["box3"].style.opacity = 0;
   currentOpeningBtn = null;
@@ -935,8 +951,11 @@ function closePopupToIsland3() {
   clickables["box3"].style.pointerEvents = "none";
 
   setTimeout(() => {
+    document.querySelector(".camera").style.transform =
+      "translateX(-50%) translateY(0) scale(1)";
     boxes["box3"].style.scale = `${scale_icon}%`;
     boxes["box3"].style.transition = "all 0s, opacity 0.3s";
+    boxes["box3"].classList.remove("island_200");
     boxes["box3"].classList.remove("open");
     boxes["box3"].style.transform = `translateX(0%) translateY(0%) scale(1)`;
     boxes["box3"].style.opacity = 1;
@@ -1016,6 +1035,7 @@ const unlockBtn = document.getElementById("unlock-btn");
 const powerbtn = document.querySelector(".power-button");
 const fingerprint = document.querySelector(".lock-fingerprint");
 const lockclock = document.querySelector(".lock-clock");
+const lock_clock_date = document.getElementById("lock_content");
 target.innerText += "amt";
 const dateText = document.getElementById("dateText");
 const clock = document.getElementById("lockclock2");
@@ -1047,9 +1067,11 @@ let wallpaper_lock_off_transform = "translateY(0px)";
 
 let wallpaper_lock_height = 70; //%
 let wallpaper_lock_scale = 80; //%
-let wallpaper_lock_borderRadius = 20; //px
+let wallpaper_lock_borderRadius = 15; //px
 let wallpaper_lock_opacity = 1;
 let wallpaper_lock_transform = "translateY(250px)";
+
+let current_wallpaper_lock = 1;
 
 let lockscreen_style_opacity = 1;
 
@@ -1066,11 +1088,17 @@ function lock() {
   lockscreen.style.transition = "all 0.3s";
   lockscreen.style.opacity = lockscreen_style_opacity;
   lockscreen.style.pointerEvents = "auto";
+  wallpaper.classList.remove("unlock");
 
   //wallpaper.classList.add("open");
 
   allApp.style.transition = "all 0s";
   allApp.classList.add("lock");
+
+  if (lock_wallpaper) {
+    wallpaper.style.transition = `all ${currentSpeed3}s, height ${currentSpeed5}s, width ${currentSpeed5}s, scale ${currentSpeed5}s, borderRadius ${currentSpeed5}s, transform ${currentSpeed5}s, opacity ${currentSpeed5}s`;
+    wallpaper.style.backgroundImage = `url("${lock_wallpaper}")`;
+  }
 
   hideAllClickables();
   clock.classList.remove("hien");
@@ -1137,6 +1165,10 @@ function lock() {
 
   if (!pass_password || !finger_biometrics) fingerprint.style.display = "none";
   if (pass_password && finger_biometrics) fingerprint.style.display = "flex";
+
+  addCustomLockscreenTime(); // để tắt
+
+  playmusic("originos_data/ui/Lock.ogg", volume_unlock_volume);
 }
 
 function unlock() {
@@ -1156,22 +1188,29 @@ function unlock() {
   lockscreen.style.display = "none";
   lockscreen.style.pointerEvents = "none";
 
+  document.getElementById("lockclock").style.filter = "brightness(1)";
+  document.getElementById("dateText").style.filter = "brightness(1)";
+
+  wallpaper.style.display = "flex";
   wallpaper.style.height = "100%";
   wallpaper.style.width = `100%`;
   wallpaper.style.scale = "100%";
-  wallpaper.style.borderRadius = "50px";
+  wallpaper.style.borderRadius = border_radius_phone;
   wallpaper.style.opacity = 1;
   wallpaper.style.transform = "translateY(0px)";
+  wallpaper.classList.add("unlock");
 
-  lockclock.style.transform = "none";
-  lockclock.style.filter = "brightness(1)";
-  dateText.style.filter = "brightness(1)";
-  dateText.style.transform = "translateY(0px) translateX(-50%) scale(0.95)";
+  if (home_wallpaper) {
+    wallpaper.style.transition = `all 0.2s, height ${currentSpeed5}s, width ${currentSpeed5}s, scale ${currentSpeed5}s, borderRadius ${currentSpeed5}s, transform ${currentSpeed5}s, opacity ${currentSpeed5}s`;
+    wallpaper.style.backgroundImage = `url("${home_wallpaper}")`;
+  }
+
+  lock_clock_date.style.transform = "none";
+  lock_clock_date.style.filter = "brightness(1)";
 
   allApp.style.transition = `all calc(1s * ${currentSpeed}) cubic-bezier(.12,1.43,.51,1.01)`;
   allApp.classList.remove("lock");
 
-  battery2.classList.remove("close");
   battery1.classList.remove("close");
   battery3.classList.remove("close");
   battery3.style.opacity = battery2.style.opacity = battery1.style.opacity = 1;
@@ -1199,6 +1238,7 @@ function unlock() {
     boxes[
       "box11"
     ].style.transition = `all ${currentSpeed3}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+
     setTimeout(() => {
       boxes["box9"].style.transform =
         "translateX(0px) translateY(0px) scale(1)";
@@ -1276,16 +1316,71 @@ function unlock() {
       }, 30);
     }, 30);
   }, 0);
+
+  clearTimeout(id_holding_locksreen);
+  clearTimeout(id_holding_locksreen2);
+  id_holding_locksreen = null;
+  id_holding_locksreen2 = null;
+  is_holding_locksreen = false;
+
+  removeCustomLockscreenTime();
+  playmusic("originos_data/ui/Unlock.ogg", volume_unlock_volume);
 }
 
 target.innerText += "ech";
 
 let unlock_time = null;
 unlockBtn.addEventListener("pointerdown", () => {
+  animation.stop();
+  animation.play();
   unlock_time = setTimeout(() => {
-    unlock();
-    animation.stop();
-    animation.play();
+    if (show_pass_for_cuslock) {
+      currentOpeningBtn = boxes["box4"];
+      app = appopen[`box4`];
+      app.style.display = "none";
+      hideAllClickables();
+      handleShowLockOption_noanim();
+      showPopup_open_close_noanim("app4theme");
+      id_holding_locksreen = null;
+      lock_preview.style.transform = "translateX(-50%) scale(1)";
+      unlock_noanim();
+      openPopupFromCurrentButton_noanim();
+      updateTime2();
+
+      id_holding_locksreen2 = setTimeout(() => {
+        lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+        AboutInSetting.style.pointerEvents = "none";
+        animationInSetting.style.pointerEvents = "none";
+
+        lockscreen.style.transform = "translateX(-50%) scale(1)";
+        id_holding_locksreen2 = null;
+        is_holding_locksreen = false;
+        show_pass_for_cuslock = false;
+
+        wallpaper_btn.addEventListener("click", handleOpenWallpaperPopup);
+        wallpaper_btn2.addEventListener("click", handleOpenWallpaperPopup);
+        back4.addEventListener("click", handleCloseWallpaperPopup);
+
+        aod_btn.addEventListener("click", handleOpenAODOption);
+        back5.addEventListener("click", handleCloseAODOption);
+
+        lock_btn.addEventListener("click", handleShowLockOption);
+        back6.addEventListener("click", handleHideLockOption);
+
+        home_btn.addEventListener("click", showHomeApp);
+        back8.addEventListener("click", hideHomeApp);
+
+        finger.addEventListener("click", showFingerPopup);
+        back9.addEventListener("click", hideFingerPopup);
+
+        removeCustomLockscreenTime(); // để tắt
+        addEventListeners_aod_preview();
+      }, 100);
+    } else {
+      open_all_island();
+      unlock();
+    }
   }, time_unlock_finger);
 });
 unlockBtn.addEventListener("pointerup", () => {
@@ -1295,23 +1390,27 @@ unlockBtn.addEventListener("pointerup", () => {
   footerText.classList.remove("shake-animate");
   void footerText.offsetWidth; // trigger reflow
   footerText.classList.add("shake-animate");
+
+  document.getElementById("wallpaper_aod2").classList.remove("open");
+  document.getElementById("lockclock").style.filter = "brightness(1)";
+  document.getElementById("dateText").style.filter = "brightness(1)";
 });
 
 let phone_lock_off_background = "#000000";
 let phone_lock_background =
-  "linear-gradient(to bottom, rgb(0, 53, 53), rgb(0, 141, 141))";
+  "linear-gradient(to bottom, rgba(47, 11, 34, 255), rgba(147, 111, 134, 255))";
 wallpaper.style.height = `${wallpaper_lock_height}%`;
 wallpaper.style.scale = `${wallpaper_lock_scale}%`;
 wallpaper.style.borderRadius = `${wallpaper_lock_borderRadius}px`;
 wallpaper.style.opacity = 1;
 
-let lockclock_style_transform = "scale(0.95) translateY(160px)";
-let dateText_style_transform = "translateY(150px) translateX(-50%) scale(0.95)";
+let lockclock_style_transform = "scale(0.75) translateY(250px)";
+let dateText_style_transform = "translateY(160px) translateX(-50%) scale(0.95)";
 
 wallpaper.style.transform = "translateY(250px)";
 phone.style.background = phone_lock_background;
-powerbtn.addEventListener("click", () => {
-  lock();
+function powerbtnEvent() {
+  if (!islock) lock();
   lock_content.style.opacity = `1`;
   swipeHandle.style.opacity = "1";
   if (ison) {
@@ -1321,8 +1420,7 @@ powerbtn.addEventListener("click", () => {
     battery3.style.transition =
       battery2.style.transition =
       battery1.style.transition =
-      dateText.style.transition =
-      lockclock.style.transition =
+      lock_clock_date.style.transition =
       wallpaper.style.transition =
         `all calc(0.5s * ${currentSpeed}) cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
 
@@ -1332,25 +1430,40 @@ powerbtn.addEventListener("click", () => {
       lockscreen.style.opacity =
         lockscreen_style_opacity;
 
-    wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
-    wallpaper.style.filter = "blur(0px)";
-    wallpaper.style.height = `${wallpaper_lock_off_height}%`;
-    wallpaper.style.width = `330px`;
-    wallpaper.style.scale = `${wallpaper_lock_off_scale}%`;
-    wallpaper.style.borderRadius = `${wallpaper_lock_off_borderRadius}px`;
-    wallpaper.style.opacity = `${wallpaper_lock_off_opacity}`;
+    if (
+      current_wallpaper_lock == "1" ||
+      !always_on_displays ||
+      hide_wallpaper
+    ) {
+      wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
+      wallpaper.style.height = `${wallpaper_lock_off_height}%`;
+      wallpaper.style.width = `100%`;
+      wallpaper.style.scale = `${wallpaper_lock_off_scale}%`;
+      wallpaper.style.borderRadius = `${wallpaper_lock_off_borderRadius}px`;
+      wallpaper.style.opacity = `${wallpaper_lock_off_opacity}`;
+      wallpaper.style.transform = wallpaper_lock_off_transform;
+      phone.style.background = phone_lock_off_background;
+      lock_clock_date.style.transform = lockclock_style_transform;
+    } else {
+      wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
+      wallpaper.style.height = `${wallpaper_lock_height}%`;
+      wallpaper.style.scale = `calc(${wallpaper_lock_scale}% + 5%)`;
+      wallpaper.style.borderRadius = `${wallpaper_lock_borderRadius}px`;
+      wallpaper.style.opacity = `calc(${wallpaper_lock_opacity} * 0.5)`;
+      wallpaper.style.transform = wallpaper_lock_transform;
 
-    wallpaper.style.transform = wallpaper_lock_off_transform;
-    phone.style.background = phone_lock_off_background;
+      phone.style.background = phone_lock_off_background;
+      lock_clock_date.style.transform = "scale(0.93) translateY(30px)";
+    }
+
+    document.getElementById("wallpaper_aod2").classList.remove("hidden");
+    wallpaper.style.display = display_wallpaper_for_show_aod_img;
 
     ison = false;
     removeSwipeEvents();
-    lockclock.style.transform = lockclock_style_transform;
-    lockclock.style.filter = "brightness(3)";
-    dateText.style.transform = dateText_style_transform;
-    dateText.style.filter = "brightness(3)";
+    document.getElementById("lockclock").style.filter = "brightness(3)";
+    document.getElementById("dateText").style.filter = "brightness(3)";
 
-    battery2.classList.add("close");
     battery1.classList.add("close");
     battery3.classList.add("close");
     thanhS1.style.pointerEvents = "none";
@@ -1375,6 +1488,7 @@ powerbtn.addEventListener("click", () => {
       lockscreen.style.opacity =
         1;
 
+    wallpaper.style.display = "flex";
     wallpaper.style.transition = `all ${currentSpeed5}s cubic-bezier(0.23, 0.55, 0.54, 0.97)`;
     wallpaper.style.height = `${wallpaper_lock_height}%`;
     wallpaper.style.width = `100%`;
@@ -1382,17 +1496,17 @@ powerbtn.addEventListener("click", () => {
     wallpaper.style.borderRadius = `${wallpaper_lock_borderRadius}px`;
     wallpaper.style.opacity = 1;
 
+    document.getElementById("wallpaper_aod2").classList.add("hidden");
+
     wallpaper.style.transform = wallpaper_lock_transform;
     phone.style.background = phone_lock_background;
 
     ison = true;
     addSwipeEvents();
-    lockclock.style.transform = "none";
-    lockclock.style.filter = "brightness(1)";
-    dateText.style.filter = "brightness(1)";
-    dateText.style.transform = "translateY(0px) translateX(-50%) scale(0.95)";
+    lock_clock_date.style.transform = "none";
+    document.getElementById("lockclock").style.filter = "brightness(1)";
+    document.getElementById("dateText").style.filter = "brightness(1)";
 
-    battery2.classList.remove("close");
     battery1.classList.remove("close");
     battery3.classList.remove("close");
     thanhS1.style.pointerEvents = "auto";
@@ -1406,7 +1520,7 @@ powerbtn.addEventListener("click", () => {
 
   footerText.classList.remove("shake-animate");
   footerText.style.opacity = 0;
-});
+}
 
 target.innerText += " -";
 
@@ -1417,23 +1531,24 @@ lockscreen.addEventListener("click", () => {
       battery1.style.opacity =
       lockscreen.style.opacity =
         1;
-    battery2.classList.remove("close");
     battery1.classList.remove("close");
     battery3.classList.remove("close");
 
+    wallpaper.style.display = "flex";
     wallpaper.style.height = `${wallpaper_lock_height}%`;
     wallpaper.style.scale = `${wallpaper_lock_scale}%`;
     wallpaper.style.borderRadius = `${wallpaper_lock_borderRadius}px`;
+    wallpaper.style.width = `100%`;
     wallpaper.style.opacity = 1;
+
+    document.getElementById("wallpaper_aod2").classList.add("hidden");
 
     wallpaper.style.transform = wallpaper_lock_transform;
     phone.style.background = phone_lock_background;
 
     ison = true;
-    lockclock.style.transform = "none";
-    lockclock.style.filter = "brightness(1)";
-    dateText.style.filter = "brightness(1)";
-    dateText.style.transform = "translateY(0px) translateX(-50%) scale(0.95)";
+    lock_clock_date.style.transform = "none";
+    lock_clock_date.style.filter = "brightness(1)";
     thanhS1.style.pointerEvents = "auto";
 
     swipeHandle.style.opacity = `1`;
@@ -1442,10 +1557,322 @@ lockscreen.addEventListener("click", () => {
     island.style.pointerEvents = "auto";
     island2.style.pointerEvents = "auto";
     island_circle.style.pointerEvents = "auto";
+
+    open_all_island();
+
+    document.getElementById("wallpaper_aod2").classList.remove("open");
+    document.getElementById("lockclock").style.filter = "brightness(1)";
+    document.getElementById("dateText").style.filter = "brightness(1)";
   }
 
   addSwipeEvents();
 });
+
+function openPopupFromCurrentButton_noanim() {
+  if (!currentOpeningBtn) return;
+
+  thanh.classList.add("open");
+
+  if (app) showPopup_open_close_noanim(app);
+
+  currentOpeningBtn.style.transition = "all 0s, height 0s, top 0s";
+
+  allApp.style.transition = wallpaper.style.transition = "all 0s";
+
+  wallpaper.style.scale = "110%";
+
+  currentOpeningBtn.classList.add("open");
+  currentOpeningBtn.style.scale = "100%";
+  currentOpeningBtn.style.zIndex = "320";
+  currentOpeningBtn.style.transform =
+    "translateX(0%) translateY(0%) scale(1.1628)";
+
+  lp.style.transition = "all 0s";
+  lp.classList.add("open");
+
+  allApp.classList.add("open");
+
+  const boxId = Object.keys(boxes).find(
+    (key) => boxes[key] === currentOpeningBtn
+  );
+  if (boxId) clickables[boxId].style.display = "none";
+
+  nav = currentOpeningBtn.querySelector(".nav");
+  if (nav) {
+    nav.style.transition = "all 0s";
+    nav.classList.add("open");
+  }
+
+  isMo = true;
+}
+
+function unlock_noanim() {
+  fingerprint.style.pointerEvents = "none";
+  island.style.pointerEvents = "auto";
+  island2.style.pointerEvents = "auto";
+  island_circle.style.pointerEvents = "auto";
+
+  thanhS1.style.pointerEvents = "auto";
+
+  islock = false;
+  ison = true;
+
+  phone.style.background = phone_lock_background;
+  lockscreen.style.opacity = 0;
+  lockscreen.style.transition = "none";
+  lockscreen.style.display = "none";
+  lockscreen.style.pointerEvents = "none";
+
+  document.getElementById("lockclock").style.filter = "brightness(1)";
+  document.getElementById("dateText").style.filter = "brightness(1)";
+
+  wallpaper.style.display = "flex";
+  wallpaper.style.height = "100%";
+  wallpaper.style.width = `100%`;
+  wallpaper.style.scale = "100%";
+  wallpaper.style.borderRadius = border_radius_phone;
+  wallpaper.style.opacity = 1;
+  wallpaper.style.transform = "translateY(0px)";
+  wallpaper.classList.add("unlock");
+
+  if (home_wallpaper) {
+    wallpaper.style.transition = `all 0s`;
+    wallpaper.style.backgroundImage = `url("${home_wallpaper}")`;
+  }
+
+  lock_clock_date.style.transform = "none";
+  lock_clock_date.style.filter = "brightness(1)";
+
+  allApp.style.transition = "all 0s";
+  allApp.classList.remove("lock");
+
+  battery1.classList.remove("close");
+  battery3.classList.remove("close");
+  battery1.style.opacity = battery2.style.opacity = battery3.style.opacity = 1;
+
+  clock.classList.add("hien");
+
+  footerText.classList.remove("shake-animate");
+  footerText.style.opacity = 0;
+
+  powerbtn.classList.add("hidden");
+
+  powerbtn.classList.remove("hidden");
+
+  input_password = "";
+  updateDots_password();
+  removeSwipeEvents();
+
+  const boxIds = [
+    "box11",
+    "box9",
+    "box10",
+    "box6",
+    "box7",
+    "box5",
+    "box8",
+    "box1",
+    "box2",
+    "box3",
+    "box4",
+  ];
+  boxIds.forEach((id) => {
+    boxes[id].style.transform = "translateX(0px) translateY(0px) scale(1)";
+    boxes[id].style.opacity = "1";
+    boxes[id].style.transition = "all 0s";
+  });
+
+  const khayapp = document.querySelector(".khayapp");
+  if (khayapp) {
+    khayapp.style.transition = "all 0s";
+    khayapp.classList.remove("lock");
+  }
+}
+
+function hidePopup_open_close_noanim(target) {
+  const el =
+    typeof target === "string" ? document.getElementById(target) : target;
+  if (!el) return;
+
+  const id = el.id;
+
+  el.classList.remove("open");
+
+  hideTimeouts_open_close[id] = setTimeout(() => {
+    el.style.display = "none";
+    hideTimeouts_open_close[id] = null;
+  }, 0);
+}
+
+function showPopup_open_close_noanim(target) {
+  const target2 =
+    typeof target === "string" ? document.getElementById(target) : target;
+  if (!target2) return;
+
+  // Gỡ animation
+  target2.style.transition = "none";
+
+  // Hiển thị popup trước
+  target2.style.display = "flex";
+  target2.classList.remove("close");
+  target2.classList.add("open");
+
+  // Buộc trình duyệt render lại trước khi thêm transition (trick)
+  requestAnimationFrame(() => {
+    target2.style.transition = "all 0.4s ease";
+  });
+}
+
+function handleShowLockOption_noanim() {
+  showPopup_open_close_noanim(lock_option);
+
+  colorCircles.forEach((circle) => {
+    circle.addEventListener("click", handleColorCircleClick);
+  });
+  clock_preview.classList.remove("hidden");
+  dateTextPreview.classList.remove("hidden");
+
+  controls_main.classList.remove("open");
+  controls_date.classList.remove("open");
+  controls_locktext.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+  customColorBtn.addEventListener("click", handleCustomColorClick);
+  colorPicker.addEventListener("input", handleColorPickerInput);
+  sizeSlider.addEventListener("input", handleSizeSliderInput);
+
+  document.getElementById("btn1").addEventListener("click", handleBtn1Click);
+  document.getElementById("btn2").addEventListener("click", handleBtn2Click);
+
+  button_decor.addEventListener("click", handleDecorClick);
+  close_controls_locktext.addEventListener(
+    "click",
+    handleclose_controls_locktextClick
+  );
+
+  addeventlistener_color_circle2();
+}
+
+let is_holding_locksreen = false;
+let id_holding_locksreen = null;
+let id_holding_locksreen2 = null;
+
+function addCustomLockscreenTime() {
+  lockscreen.addEventListener("pointerdown", onLockscreenPointerDown);
+  lockscreen.addEventListener("pointerup", onLockscreenPointerUp);
+}
+
+function removeCustomLockscreenTime() {
+  lockscreen.removeEventListener("pointerdown", onLockscreenPointerDown);
+  lockscreen.removeEventListener("pointerup", onLockscreenPointerUp);
+  clearTimeout(id_holding_locksreen);
+  clearTimeout(id_holding_locksreen2);
+  id_holding_locksreen = null;
+  id_holding_locksreen2 = null;
+  is_holding_locksreen = false;
+  lockscreen.style.transform = "translateX(-50%) scale(1)";
+}
+
+let show_pass_for_cuslock = false;
+function onLockscreenPointerDown(e) {
+  if (e.target !== lockscreen || !ison) return;
+  clock_preview.classList.remove("hidden");
+  dateTextPreview.classList.remove("hidden");
+
+  controls_main.classList.remove("open");
+  controls_date.classList.remove("open");
+  controls_locktext.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+  lockscreen.style.transform = "translateX(-50%) scale(0.98)";
+  is_holding_locksreen = true;
+
+  hidePopup_open_close(credits);
+  hidePopup_open_close(app4_vesion);
+  hidePopup_open_close(app4animation);
+  hidePopup_open_close(app4_home);
+  hidePopup_open_close(wallpaper_option);
+  hidePopup_open_close(aod_option);
+  hidePopup_open_close(app4_finger);
+  hidePopup_open_close(app4icon);
+  hidePopup_open_close(app4audio);
+  hidePopup_open_close(app4_lock_style);
+  hidePopup_open_close(crea_pass);
+
+  id_holding_locksreen = setTimeout(() => {
+    if (pass_password) {
+      swipeHandle.style.opacity = "0";
+      lock_content.style.opacity = `0`;
+      container_password.style.animation = "none";
+      container_password.style.display = "flex";
+      container_password.style.pointerEvents = "auto";
+      animateKeys_password();
+      input_password = "";
+      updateDots_password();
+      show_pass_for_cuslock = true;
+      lockscreen.style.transform = "translateX(-50%) scale(1)";
+    } else {
+      currentOpeningBtn = boxes["box4"];
+      app = appopen[`box4`];
+      app.style.display = "none";
+      hideAllClickables();
+      handleShowLockOption_noanim();
+      showPopup_open_close_noanim("app4theme");
+      id_holding_locksreen = null;
+      lock_preview.style.transform = "translateX(-50%) scale(1)";
+      unlock_noanim();
+      openPopupFromCurrentButton_noanim();
+      updateTime2();
+
+      id_holding_locksreen2 = setTimeout(() => {
+        lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+        AboutInSetting.style.pointerEvents = "none";
+        animationInSetting.style.pointerEvents = "none";
+
+        lockscreen.style.transform = "translateX(-50%) scale(1)";
+        id_holding_locksreen2 = null;
+        is_holding_locksreen = false;
+
+        wallpaper_btn.addEventListener("click", handleOpenWallpaperPopup);
+        wallpaper_btn2.addEventListener("click", handleOpenWallpaperPopup);
+        back4.addEventListener("click", handleCloseWallpaperPopup);
+
+        aod_btn.addEventListener("click", handleOpenAODOption);
+        back5.addEventListener("click", handleCloseAODOption);
+
+        lock_btn.addEventListener("click", handleShowLockOption);
+        back6.addEventListener("click", handleHideLockOption);
+
+        home_btn.addEventListener("click", showHomeApp);
+        back8.addEventListener("click", hideHomeApp);
+
+        finger.addEventListener("click", showFingerPopup);
+        back9.addEventListener("click", hideFingerPopup);
+
+        removeCustomLockscreenTime(); // để tắt
+        addEventListeners_aod_preview();
+      }, 100);
+    }
+  }, 600);
+}
+
+function onLockscreenPointerUp() {
+  if (id_holding_locksreen) {
+    clearTimeout(id_holding_locksreen);
+    id_holding_locksreen = null;
+    if (id_holding_locksreen2) {
+      clearTimeout(id_holding_locksreen2);
+      id_holding_locksreen2 = null;
+    }
+  }
+  is_holding_locksreen = false;
+  lockscreen.style.transform = "translateX(-50%) scale(1)";
+}
+
+addCustomLockscreenTime();
 
 // in setting
 let duration = 1.7 * currentSpeed;
@@ -1495,7 +1922,7 @@ const app4_vesion = document.getElementById("app4vesion");
 const back10 = document.getElementById("back_to_setting10");
 
 const language_btn = document.querySelector(".khaysetting5");
-const app4_language = document.getElementById("app4language");
+const app4audio = document.getElementById("app4audio");
 const back11 = document.getElementById("back_to_setting11");
 
 const icon_btn = document.getElementById("icon_btn");
@@ -1515,7 +1942,7 @@ const back14 = document.getElementById("back_to_setting14");
 
 const hideTimeouts_open_close = {};
 
-function showPopup_open_close(target) {
+function showPopup_open_close(target, mode = "flex") {
   const el =
     typeof target === "string" ? document.getElementById(target) : target;
   if (!el) return;
@@ -1527,7 +1954,7 @@ function showPopup_open_close(target) {
     hideTimeouts_open_close[id] = null;
   }
 
-  el.style.display = "flex";
+  el.style.display = mode;
 
   requestAnimationFrame(() => {
     el.classList.remove("close");
@@ -1537,7 +1964,7 @@ function showPopup_open_close(target) {
 
 target.innerText += "lax";
 
-function hidePopup_open_close(target) {
+function hidePopup_open_close(target, mode = "none") {
   const el =
     typeof target === "string" ? document.getElementById(target) : target;
   if (!el) return;
@@ -1547,24 +1974,9 @@ function hidePopup_open_close(target) {
   el.classList.remove("open");
 
   hideTimeouts_open_close[id] = setTimeout(() => {
-    el.style.display = "none";
+    el.style.display = mode;
     hideTimeouts_open_close[id] = null;
   }, 400);
-}
-
-function hidePopup_open_close(target) {
-  const el =
-    typeof target === "string" ? document.getElementById(target) : target;
-  if (!el) return;
-
-  const id = el.id;
-
-  el.classList.remove("open");
-
-  hideTimeouts_open_close[id] = setTimeout(() => {
-    el.style.display = "none";
-    hideTimeouts_open_close[id] = null;
-  }, 500);
 }
 
 //about option
@@ -1726,24 +2138,110 @@ function restoreSettings_finger_pass() {
 }
 
 language_btn.addEventListener("click", () => {
-  showPopup_open_close(app4_language);
+  showPopup_open_close(app4audio);
 
   AboutInSetting.style.pointerEvents = "none";
   theme_option.style.pointerEvents = "none";
+
+  addSystemVolumeListeners();
 });
 back11.addEventListener("click", () => {
-  hidePopup_open_close(app4_language);
+  hidePopup_open_close(app4audio);
 
   AboutInSetting.style.pointerEvents = "auto";
   theme_option.style.pointerEvents = "auto";
 });
+
+let volume_all_volume = 1;
+let volume_click_volume = 0;
+let volume_unlock_volume = 1;
+let volume_charge_volume = 1;
+
+const slider_volume = document.getElementById("volume_all_slider");
+const toggle_click_volume = document.getElementById("toggle_click_volume");
+const toggle_unlock_volume = document.getElementById("toggle_unlock_volume");
+const toggle_charge_volume = document.getElementById("toggle_charge_volume");
+
+function addSystemVolumeListeners() {
+  slider_volume.addEventListener("input", onVolumeSliderInput);
+  slider_volume.addEventListener("pointerup", onVolumeSliderRelease);
+  toggle_click_volume.addEventListener("click", onClickToggle);
+  toggle_unlock_volume.addEventListener("click", onUnlockToggle);
+  toggle_charge_volume.addEventListener("click", onChargeToggle);
+}
+
+function removeSystemVolumeListeners() {
+  slider_volume.removeEventListener("input", onVolumeSliderInput);
+  slider_volume.removeEventListener("pointerup", onVolumeSliderRelease);
+  toggle_click_volume.removeEventListener("click", onClickToggle);
+  toggle_unlock_volume.removeEventListener("click", onUnlockToggle);
+  toggle_charge_volume.removeEventListener("click", onChargeToggle);
+}
+
+function updateIndividualVolumes() {
+  if (toggle_click_volume.classList.contains("active")) {
+    volume_click_volume = volume_all_volume;
+  }
+  if (toggle_unlock_volume.classList.contains("active")) {
+    volume_unlock_volume = volume_all_volume;
+  }
+  if (toggle_charge_volume.classList.contains("active")) {
+    volume_charge_volume = volume_all_volume;
+  }
+}
+
+function onVolumeSliderInput() {
+  volume_all_volume = parseFloat(slider_volume.value);
+  localStorage.setItem("volume_all_volume", volume_all_volume);
+  updateIndividualVolumes();
+}
+
+function onVolumeSliderRelease() {
+  playmusic("originos_data/ui/Effect_Tick.ogg", volume_click_volume);
+}
+
+function onClickToggle() {
+  const isActive = toggle_click_volume.classList.toggle("active");
+  if (isActive) {
+    volume_click_volume = volume_all_volume;
+  } else {
+    volume_click_volume = 0;
+  }
+  localStorage.setItem("volume_click_volume", volume_click_volume);
+  if (volume_click_volume > 0) {
+    playmusic("originos_data/ui/Effect_Tick.ogg", volume_click_volume);
+  }
+}
+
+function onUnlockToggle() {
+  const isActive = toggle_unlock_volume.classList.toggle("active");
+  if (isActive) {
+    volume_unlock_volume = volume_all_volume;
+  } else {
+    volume_unlock_volume = 0;
+  }
+  localStorage.setItem("volume_unlock_volume", volume_unlock_volume);
+}
+
+function onChargeToggle() {
+  const isActive = toggle_charge_volume.classList.toggle("active");
+  if (isActive) {
+    volume_charge_volume = volume_all_volume;
+  } else {
+    volume_charge_volume = 0;
+  }
+  localStorage.setItem("volume_charge_volume", volume_charge_volume);
+}
+
+// Khôi phục trạng thái từ localStorage
 
 function handleBoxPass1() {
   remove_pass_btn.style.display = "none";
   showPopup_open_close(crea_pass);
   if (pass_password == "") {
     stage_crea_pass = 1;
-    document.getElementById("title_crea_pass").textContent = "Tạo mật mã mới";
+    document.getElementById("title_crea_pass").textContent =
+      "Create new password";
   }
 }
 
@@ -1752,7 +2250,7 @@ function handleBack14() {
   input_crea_pass = "";
   newPass_crea_pass = "";
   document.getElementById("title_crea_pass").textContent =
-    pass_password === "" ? "Tạo mật mã mới" : "Nhập mật mã cũ";
+    pass_password === "" ? "Create new password" : "Enter old password";
   document.getElementById("error_crea_pass").textContent = "";
   updateDots_crea_pass();
   hidePopup_open_close(crea_pass);
@@ -1800,10 +2298,12 @@ function handleBlurAppToggle() {
   blur_app = blurAppBtn.classList.contains("active") ? 1 : 0;
 
   if (blur_app) {
+    lp.style.display = "flex";
     lp.style.filter = "blur(20px)";
     localStorage.setItem("blur_App_saved", "1");
   } else {
     lp.style.filter = "blur(0px)";
+    lp.style.display = "none";
     localStorage.removeItem("blur_App_saved");
   }
 }
@@ -1831,6 +2331,8 @@ theme_option.addEventListener("click", () => {
 
   finger.addEventListener("click", showFingerPopup);
   back9.addEventListener("click", hideFingerPopup);
+
+  addEventListeners_aod_preview();
 });
 back3.addEventListener("click", () => {
   hidePopup_open_close("app4theme");
@@ -1853,6 +2355,8 @@ back3.addEventListener("click", () => {
 
   finger.removeEventListener("click", showFingerPopup);
   back9.removeEventListener("click", hideFingerPopup);
+
+  removeEventListeners_aod_preview();
 });
 
 function handleOpenWallpaperPopup() {
@@ -1870,20 +2374,69 @@ const wallpaper_preview2 = document.querySelector(".wallpaper-preview2");
 const wallPaper2 = document.querySelector(".wallpaper2");
 const addBtn = document.getElementById("addBtn");
 
-function setActive(btn, imageUrl) {
-  wallpaper.style.backgroundImage = `url(${imageUrl})`;
-  wallpaper_preview.style.backgroundImage = `url(${imageUrl})`;
-  wallpaper_preview2.style.backgroundImage = `url(${imageUrl})`;
-  wallpaper2.style.backgroundImage = `url(${imageUrl})`;
+const popup_overlay_wallpaper = document.getElementById(
+  "popup_overlay_wallpaper"
+);
+const btn_set_home_wallpaper = document.getElementById(
+  "btn_set_home_wallpaper"
+);
+const btn_set_lock_wallpaper = document.getElementById(
+  "btn_set_lock_wallpaper"
+);
+const btn_set_both_wallpaper = document.getElementById(
+  "btn_set_both_wallpaper"
+);
+const btn_cancel_wallpaper = document.getElementById("btn_cancel_wallpaper");
 
-  localStorage.setItem("savedWallpaper", imageUrl);
+let selectedImageUrl = "";
+let selectedButton = null;
+
+function setLockWallpaper(imageUrl, btn) {
+  lock_wallpaper = imageUrl;
+  setData("lock_wallpaper", imageUrl);
+
+  wallPaper2.style.backgroundImage = `url(${imageUrl})`;
+  wallpaper_preview2.style.backgroundImage = `url(${imageUrl})`;
+
+  select_color_from_img(imageUrl);
+}
+
+function setHomeWallpaper(imageUrl, btn) {
+  home_wallpaper = imageUrl;
+  setData("home_wallpaper", home_wallpaper);
+
+  wallpaper_preview.style.backgroundImage = `url(${imageUrl})`;
+  wallpaper.style.backgroundImage = `url(${imageUrl})`;
+}
+
+function setBothWallpapers(imageUrl) {
+  setHomeWallpaper(imageUrl);
+  setLockWallpaper(imageUrl);
+}
+
+function showWallpaperPopup(imageUrl, button) {
+  selectedImageUrl = imageUrl;
+  selectedButton = button;
+  showPopup_open_close(popup_overlay_wallpaper);
+  showPopup_open_close("popup_wallpaperid", "block");
+}
+
+function hideWallpaperPopup() {
+  hidePopup_open_close(popup_overlay_wallpaper);
+  hidePopup_open_close("popup_wallpaperid");
+  selectedImageUrl = "";
+  selectedButton = null;
+}
+
+function setActive(btn) {
   buttons.forEach((b) => b.classList.remove("active"));
   btn.classList.add("active");
+  select_color_from_img(selectedImageUrl);
 }
 
 function handleImageButtonClick(e) {
   const img = e.currentTarget.getAttribute("data-img");
-  setActive(e.currentTarget, img);
+  showWallpaperPopup(img, e.currentTarget);
 }
 
 function handleAddButtonClick() {
@@ -1897,17 +2450,37 @@ function handleFileInputChange(event) {
     const reader = new FileReader();
     reader.onload = function (e) {
       const dataUrl = e.target.result;
-      setActive(addBtn, dataUrl);
       addBtn.setAttribute("data-img", dataUrl);
+      showWallpaperPopup(dataUrl, addBtn);
     };
     reader.readAsDataURL(file);
   } else {
-    alert("Vui lòng chọn ảnh hợp lệ.");
+    alert("Please select a valid image.");
   }
 }
 
-buttons[0].click();
+// Popup button actions
+btn_set_lock_wallpaper.addEventListener("click", () => {
+  setLockWallpaper(selectedImageUrl, selectedButton);
+  hideWallpaperPopup();
+});
 
+btn_set_home_wallpaper.addEventListener("click", () => {
+  setHomeWallpaper(selectedImageUrl, selectedButton);
+  hideWallpaperPopup();
+});
+
+btn_set_both_wallpaper.addEventListener("click", () => {
+  setLockWallpaper(selectedImageUrl, selectedButton);
+  setHomeWallpaper(selectedImageUrl, selectedButton);
+  hideWallpaperPopup();
+});
+
+btn_cancel_wallpaper.addEventListener("click", () => {
+  hideWallpaperPopup();
+});
+
+// Init listeners
 function addWallpaperImageListeners() {
   buttons.forEach((btn) => {
     if (btn !== addBtn) {
@@ -1928,6 +2501,11 @@ function removeWallpaperImageListeners() {
 
   addBtn.removeEventListener("click", handleAddButtonClick);
   fileInput.removeEventListener("change", handleFileInputChange);
+}
+
+// Tùy chọn: auto click ảnh đầu tiên
+if (buttons[0]) {
+  buttons[0].click();
 }
 
 function handleOpenAODOption() {
@@ -1964,11 +2542,13 @@ function handleToggleAlwaysOnDisplays() {
     wallpaper_lock_off_borderRadius = 0;
     wallpaper_lock_off_transform = "translateY(0px)";
 
-    lockclock_style_transform = "scale(0.95) translateY(160px)";
-    dateText_style_transform = "translateY(150px) translateX(-50%) scale(0.95)";
+    lockclock_style_transform = "scale(0.75) translateY(250px)";
+    dateText_style_transform = "translateY(160px) translateX(-50%) scale(0.95)";
 
     localStorage.removeItem("always_on_displays_saved");
     localStorage.removeItem("hide_wallpaper_saved");
+
+    document.getElementById("wallpaper_aod2").classList.remove("hidden2");
   } else {
     hideWallEl.style.filter = "brightness(0.7)";
     hideWallEl.style.pointerEvents = "none";
@@ -1984,7 +2564,9 @@ function handleToggleAlwaysOnDisplays() {
     wallpaper_lock_off_transform = wallpaper_lock_transform;
 
     dateText_style_transform = "translateX(-50%) scale(0.9) translateY(10px)";
-    lockclock_style_transform = "scale(0.95) translateY(10px)";
+    lockclock_style_transform = "scale(0.85) translateY(60px)";
+
+    document.getElementById("wallpaper_aod2").classList.add("hidden2");
   }
 }
 
@@ -2003,7 +2585,9 @@ function handleToggleHideWallpaper() {
     wallpaper_lock_off_transform = wallpaper_lock_transform;
 
     dateText_style_transform = "translateX(-50%) scale(0.9) translateY(10px)";
-    lockclock_style_transform = "scale(0.95) translateY(10px)";
+    lockclock_style_transform = "scale(0.85) translateY(60px)";
+
+    document.getElementById("wallpaper_aod2").classList.add("hidden2");
   } else {
     wallpaper_lock_off_opacity = 1;
     wallpaper_lock_off_height = 50;
@@ -2011,11 +2595,100 @@ function handleToggleHideWallpaper() {
     wallpaper_lock_off_borderRadius = 0;
     wallpaper_lock_off_transform = "translateY(0px)";
 
-    lockclock_style_transform = "scale(0.95) translateY(160px)";
-    dateText_style_transform = "translateY(150px) translateX(-50%) scale(0.95)";
+    document.getElementById("wallpaper_aod2").classList.remove("hidden2");
+
+    lockclock_style_transform = "scale(0.75) translateY(250px)";
+    dateText_style_transform = "translateY(160px) translateX(-50%) scale(0.95)";
 
     localStorage.removeItem("hide_wallpaper_saved");
   }
+}
+
+let display_wallpaper_for_show_aod_img = "flex";
+const wallpaper_aod2 = document.getElementById("wallpaper_aod2");
+
+function addEventListeners_aod_preview() {
+  document.querySelectorAll(".aod_preview_screen").forEach((div) => {
+    div.addEventListener("click", handleAodPreviewClick);
+  });
+
+  document
+    .getElementById("upload_aod_wallpaper")
+    .addEventListener("change", handleUploadAodWallpaper);
+}
+
+function removeEventListeners_aod_preview() {
+  document.querySelectorAll(".aod_preview_screen").forEach((div) => {
+    div.removeEventListener("click", handleAodPreviewClick);
+  });
+
+  document
+    .getElementById("upload_aod_wallpaper")
+    .removeEventListener("change", handleUploadAodWallpaper);
+}
+
+function handleAodPreviewClick(event) {
+  const div = event.currentTarget;
+
+  if (hide_wallpaper || !always_on_displays) {
+    tb_system("turn off Hide wallpaper fist");
+    return;
+  }
+
+  current_wallpaper_lock = div.getAttribute("current_wallpaper_lock");
+
+  if (div.id === "soon") {
+    document.getElementById("upload_aod_wallpaper").click();
+  }
+
+  document.querySelectorAll(".aod_preview_screen").forEach((el) => {
+    el.classList.remove("active");
+  });
+  div.classList.add("active");
+
+  const display = div.getAttribute("display_wallpaper_aod2");
+  const opacity = div.getAttribute("opacity") || "1";
+
+  display_wallpaper_for_show_aod_img = opacity;
+  localStorage.setItem("current_wallpaper_lock", current_wallpaper_lock);
+  localStorage.setItem("wallpaper_aod2_display", display);
+  localStorage.setItem("wallpaper_aod2_opacity", opacity);
+
+  wallpaper_aod2.style.display = display;
+  wallpaper_aod2.style.opacity = opacity;
+}
+
+function handleUploadAodWallpaper(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const imageData = reader.result;
+
+    const soonDiv = document.getElementById("soon");
+    const display = soonDiv.getAttribute("display_wallpaper_aod2");
+    const opacity = soonDiv.getAttribute("opacity");
+    const currentWallpaper = soonDiv.getAttribute("current_wallpaper_lock");
+
+    setData("wallpaper_aod2_image", imageData);
+    localStorage.setItem("wallpaper_aod2_display", display);
+    localStorage.setItem("wallpaper_aod2_opacity", opacity);
+    localStorage.setItem("current_wallpaper_lock", currentWallpaper);
+
+    wallpaper_aod2.style.backgroundImage = `url('${imageData}')`;
+    wallpaper_aod2.style.display = display;
+    wallpaper_aod2.style.opacity = opacity;
+
+    display_wallpaper_for_show_aod_img = opacity;
+    current_wallpaper_lock = currentWallpaper;
+
+    document.querySelectorAll(".aod_preview_screen").forEach((el) => {
+      el.classList.remove("active");
+    });
+    soonDiv.classList.add("active");
+  };
+  reader.readAsDataURL(file);
 }
 
 function addWallpaperSettingListeners() {
@@ -2042,6 +2715,14 @@ function handleShowLockOption() {
   colorCircles.forEach((circle) => {
     circle.addEventListener("click", handleColorCircleClick);
   });
+  clock_preview.classList.remove("hidden");
+  dateTextPreview.classList.remove("hidden");
+
+  controls_main.classList.remove("open");
+  controls_date.classList.remove("open");
+  controls_locktext.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
 
   customColorBtn.addEventListener("click", handleCustomColorClick);
   colorPicker.addEventListener("input", handleColorPickerInput);
@@ -2049,6 +2730,14 @@ function handleShowLockOption() {
 
   document.getElementById("btn1").addEventListener("click", handleBtn1Click);
   document.getElementById("btn2").addEventListener("click", handleBtn2Click);
+
+  button_decor.addEventListener("click", handleDecorClick);
+  close_controls_locktext.addEventListener(
+    "click",
+    handleclose_controls_locktextClick
+  );
+
+  addeventlistener_color_circle2();
 }
 function handleHideLockOption() {
   hidePopup_open_close(lock_option);
@@ -2056,6 +2745,14 @@ function handleHideLockOption() {
   colorCircles.forEach((circle) => {
     circle.removeEventListener("click", handleColorCircleClick);
   });
+  clock_preview.classList.remove("hidden");
+  dateTextPreview.classList.remove("hidden");
+
+  controls_main.classList.remove("open");
+  controls_date.classList.remove("open");
+  controls_locktext.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
 
   customColorBtn.removeEventListener("click", handleCustomColorClick);
   colorPicker.removeEventListener("input", handleColorPickerInput);
@@ -2063,6 +2760,14 @@ function handleHideLockOption() {
 
   document.getElementById("btn1").removeEventListener("click", handleBtn1Click);
   document.getElementById("btn2").removeEventListener("click", handleBtn2Click);
+
+  button_decor.removeEventListener("click", handleDecorClick);
+  close_controls_locktext.removeEventListener(
+    "click",
+    handleclose_controls_locktextClick
+  );
+
+  removeeventlistener_color_circle2();
 }
 
 const clock_preview = document.getElementById("clock_preview");
@@ -2072,10 +2777,288 @@ const colorPicker = document.getElementById("colorPicker");
 const sizeSlider = document.getElementById("sizeSlider");
 target.innerText += "yA";
 const date_preview = document.getElementById("dateTextPreview");
+const button_decor = document.getElementById("button_decor");
+
+const controls_main = document.getElementById("controls_main");
+const controls_date = document.getElementById("controls_date");
+const controls_locktext = document.getElementById("controls_locktext");
+
+const close_controls_main = document.getElementById("close_controls_main");
+const close_controls_date = document.getElementById("close_controls_date");
+const close_controls_locktext = document.getElementById(
+  "close_controls_locktext"
+);
+
+const lock_preview = document.querySelector(".lock_preview");
+
+function handleDecorClick() {
+  controls_locktext.classList.add("open");
+  controls_main.classList.remove("open");
+  controls_date.classList.remove("open");
+  lock_preview.style.transform =
+    "translateX(-50%) scale(0.53) translateY(-160px)";
+}
+function handleclose_controls_locktextClick() {
+  controls_locktext.classList.remove("open");
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+  if (
+    !document.querySelector(".wallpaper2")?.classList.contains("hidden_overlay")
+  )
+    document.getElementById("controls_colorful_photos").classList.add("open");
+}
+date_preview.addEventListener("click", () => {
+  controls_locktext.classList.remove("open");
+
+  controls_date.classList.add("open");
+  controls_main.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.9) translateY(90px)";
+  clock_preview.classList.add("hidden");
+  dateTextPreview.classList.remove("hidden");
+});
+close_controls_date.addEventListener("click", () => {
+  controls_date.classList.remove("open");
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+  clock_preview.classList.remove("hidden");
+  dateTextPreview.classList.remove("hidden");
+});
+
+const lessMoreInput = document.getElementById("less_more_input");
+const lessMoreEdit = document.getElementById("less_more_edit");
+
+// Load từ localStorage hoặc mặc định
+let custom_text_less_is_more =
+  localStorage.getItem("custom_text_less_is_more") || "Less is more";
+
+// Gán giá trị vào giao diện
+lessMoreInput.value = custom_text_less_is_more;
+document.getElementById("text_lock_cus").textContent = custom_text_less_is_more;
+document.getElementById("text_lock_cus_2").textContent =
+  custom_text_less_is_more;
+
+// Bấm nút edit
+lessMoreEdit.onclick = (e) => {
+  e.stopPropagation();
+  lessMoreInput.disabled = false;
+  lessMoreInput.classList.add("editable");
+  lessMoreInput.style.borderBottom = "6px solid gray";
+  lessMoreInput.focus();
+  // Đặt con trỏ ở cuối
+  const len = lessMoreInput.value.length;
+  lessMoreInput.setSelectionRange(len, len);
+};
+
+// Khi blur input
+lessMoreInput.onblur = () => {
+  lessMoreInput.disabled = true;
+  lessMoreInput.classList.remove("editable");
+  lessMoreInput.style.borderBottom = "none";
+
+  // Nếu trống thì trả lại mặc định
+  if (lessMoreInput.value.trim() === "") {
+    lessMoreInput.value = "Less is more";
+  }
+
+  // Cập nhật preview và lưu
+  custom_text_less_is_more = lessMoreInput.value;
+  localStorage.setItem("custom_text_less_is_more", custom_text_less_is_more);
+  document.getElementById("text_lock_cus").textContent =
+    custom_text_less_is_more;
+  document.getElementById("text_lock_cus_2").textContent =
+    custom_text_less_is_more;
+};
+
+// Gõ tới đâu cập nhật tới đó
+lessMoreInput.addEventListener("input", () => {
+  if (lessMoreInput.value.length > 14) {
+    lessMoreInput.value = lessMoreInput.value.slice(0, 14);
+    tb_system("Maximum 14 characters!");
+    lessMoreInput.style.borderBottom = "6px solid red";
+  } else {
+    lessMoreInput.style.borderBottom = "6px solid gray";
+  }
+
+  document.getElementById("text_lock_cus").textContent =
+    custom_text_less_is_more;
+  document.getElementById("text_lock_cus_2").textContent =
+    custom_text_less_is_more;
+
+  localStorage.setItem("custom_text_less_is_more", custom_text_less_is_more);
+});
+
+// Enter để blur
+lessMoreInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    lessMoreInput.blur();
+    lessMoreInput.style.borderBottom = "none";
+  }
+});
+
+const optNone = document.getElementById("optNone");
+const optText = document.getElementById("optText");
+const textInput = document.getElementById("textInput");
+const editBtn = document.getElementById("editBtn");
+
+let saved = localStorage.getItem("custom_text_lock_screen") || "Text";
+textInput.value = saved;
+
+if (saved === "") optNone.classList.add("active");
+else optText.classList.add("active");
+
+function setActive_date(opt) {
+  optNone.classList.remove("active");
+  optText.classList.remove("active");
+  opt.classList.add("active");
+}
+
+optNone.onclick = () => {
+  setActive_date(optNone);
+  custom_text_lock_screen = "";
+  dateElement.textContent = `${formatted} ${custom_text_lock_screen}`;
+  document.getElementById(
+    "dateTextPreview"
+  ).textContent = `${formatted} ${custom_text_lock_screen}`;
+  if (!textInput.value.trim()) textInput.value = "Text";
+  localStorage.setItem("custom_text_lock_screen", "");
+};
+
+optText.onclick = () => {
+  setActive_date(optText);
+  if (!textInput.value.trim()) textInput.value = "Text";
+
+  custom_text_lock_screen = textInput.value;
+  dateElement.textContent = `${formatted} ${custom_text_lock_screen}`;
+  document.getElementById(
+    "dateTextPreview"
+  ).textContent = `${formatted} ${custom_text_lock_screen}`;
+  localStorage.setItem("custom_text_lock_screen", textInput.value);
+};
+
+editBtn.onclick = (e) => {
+  e.stopPropagation();
+  setActive_date(optText);
+  textInput.disabled = false;
+  textInput.classList.add("editable");
+  textInput.style.borderBottom = "6px solid gray";
+
+  textInput.focus();
+  textInput.setSelectionRange(textInput.value.length, textInput.value.length);
+};
+
+textInput.onblur = () => {
+  textInput.disabled = true;
+  textInput.classList.remove("editable");
+  textInput.style.borderBottom = "none";
+
+  if (optText.classList.contains("active")) {
+    custom_text_lock_screen = textInput.value;
+    dateElement.textContent = `${formatted} ${custom_text_lock_screen}`;
+    document.getElementById(
+      "dateTextPreview"
+    ).textContent = `${formatted} ${custom_text_lock_screen}`;
+    localStorage.setItem("custom_text_lock_screen", textInput.value);
+  }
+};
+
+textInput.onkeydown = (e) => {
+  if (e.key === "Enter") {
+    if (!textInput.value.trim()) textInput.value = "Text";
+    textInput.blur();
+
+    dateElement.textContent = `${formatted} ${custom_text_lock_screen}`;
+    document.getElementById(
+      "dateTextPreview"
+    ).textContent = `${formatted} ${custom_text_lock_screen}`;
+  }
+  custom_text_lock_screen = textInput.value;
+};
+
+textInput.addEventListener("input", () => {
+  if (textInput.value.length > 14) {
+    textInput.value = textInput.value.slice(0, 14);
+    tb_system("Maximum 14 characters!");
+    textInput.style.borderBottom = "6px solid red";
+  } else {
+    textInput.style.borderBottom = "6px solid gray";
+  }
+
+  custom_text_lock_screen = textInput.value;
+  preview.textContent = custom_text_lock_screen;
+  localStorage.setItem("custom_text_lock_screen", custom_text_lock_screen);
+});
+
+clock_preview.addEventListener("click", () => {
+  controls_main.classList.add("open");
+
+  controls_locktext.classList.remove("open");
+  controls_date.classList.remove("open");
+
+  lock_preview.style.transform = "translateX(-50%) scale(0.9) translateY(90px)";
+  dateTextPreview.classList.add("hidden");
+  clock_preview.classList.remove("hidden");
+});
+close_controls_main.addEventListener("click", () => {
+  controls_main.classList.remove("open");
+  lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+  dateTextPreview.classList.remove("hidden");
+  clock_preview.classList.remove("hidden");
+});
+
+const btnThin = document.getElementById("btn_main");
+const btnBold = document.getElementById("btn_font");
+
+btnThin.addEventListener("click", () => {
+  clock_preview.style.fontWeight = "300";
+  lockclock.style.fontWeight = "300";
+
+  localStorage.setItem("font_weight_lock", "300");
+});
+
+btnBold.addEventListener("click", () => {
+  clock_preview.style.fontWeight = "600";
+  lockclock.style.fontWeight = "600";
+
+  localStorage.setItem("font_weight_lock", "600");
+});
+
+document.querySelectorAll(".font-button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const font = btn.getAttribute("data-font");
+    const min = parseInt(btn.getAttribute("data-min")) || 40;
+    const max = parseInt(btn.getAttribute("data-max")) || 150;
+
+    clock_preview.style.fontFamily = font;
+    lockclock.style.fontFamily = font;
+
+    sizeSlider.min = min;
+    sizeSlider.max = max;
+
+    if (sizeSlider.value < min) sizeSlider.value = min;
+    if (sizeSlider.value > max) sizeSlider.value = max;
+
+    clock_preview.style.fontSize = `${sizeSlider.value}px`;
+    lockclock.style.fontSize = `${sizeSlider.value}px`;
+    localStorage.setItem("fontSize", sizeSlider.value);
+
+    localStorage.setItem("font_lock_saved", font);
+    localStorage.setItem("font_min_lock_saved", min);
+    localStorage.setItem("font_max_lock_saved", max);
+  });
+});
+
+let color_contrastColor_saved = localStorage.getItem(
+  "color_contrastColor_saved"
+);
+let color_contrastColor = true;
+if (!color_contrastColor_saved) color_contrastColor = false;
 
 function handleColorCircleClick(e) {
   const color = e.currentTarget.getAttribute("data-color");
   if (color) {
+    color_contrastColor = false;
+    localStorage.setItem("color_contrastColor_saved", 0);
+
     clock_preview.style.color = color;
     lockclock.style.color = color;
     dateText.style.color = color;
@@ -2100,22 +3083,229 @@ function handleSizeSliderInput() {
   const size = sizeSlider.value;
   clock_preview.style.fontSize = `${size}px`;
   lockclock.style.fontSize = `${size}px`;
-  // Nếu cần chỉnh date font size theo tỉ lệ thì mở lại dòng dưới
-  // date_preview.style.fontSize = `calc(${size}px / 5)`;
-  // dateText.style.fontSize = `calc(${size}px / 5)`;
+
+  localStorage.setItem("fontSize", size);
+}
+
+function triggerColorPicker_lockscreen() {
+  document.getElementById("color_input_lockscreen").click();
+}
+
+function darkenColor_lockscreen(rgb, amount = 100) {
+  const [r, g, b] = rgb.match(/\d+/g).map(Number);
+
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  contrastColor = brightness > 120 ? "#141414" : "#ffffff";
+  updateWallpaperBorderColor(getReadableColor(rgb), rgb);
+
+  if (color_contrastColor) {
+    if (
+      !document
+        .querySelector(".wallpaper2")
+        ?.classList.contains("hidden_overlay")
+    ) {
+      clock_preview.style.color = contrastColor;
+      lockclock.style.color = contrastColor;
+      dateText.style.color = contrastColor;
+      date_preview.style.color = contrastColor;
+      localStorage.setItem("color_lock_saved", contrastColor);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    } else {
+      clock_preview.style.color = contrastColor2;
+      lockclock.style.color = contrastColor2;
+      dateText.style.color = contrastColor2;
+      date_preview.style.color = contrastColor2;
+      localStorage.setItem("color_lock_saved", contrastColor2);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    }
+  }
+
+  return `rgb(${Math.max(r - amount, 0)}, ${Math.max(
+    g - amount,
+    0
+  )}, ${Math.max(b - amount, 0)})`;
+}
+function getReadableColor(color) {
+  let r, g, b;
+
+  // Nếu là rgb() hoặc rgba()
+  if (color.startsWith("rgb")) {
+    const values = color.match(/\d+/g).map(Number);
+    [r, g, b] = values;
+  }
+
+  // Nếu là hex (#rrggbb hoặc #rgb)
+  else if (color.startsWith("#")) {
+    color = color.slice(1);
+    if (color.length === 3) {
+      color = color
+        .split("")
+        .map((c) => c + c)
+        .join(""); // #abc -> #aabbcc
+    }
+    const bigint = parseInt(color, 16);
+    r = (bigint >> 16) & 255;
+    g = (bigint >> 8) & 255;
+    b = bigint & 255;
+  }
+
+  // Nếu không hợp lệ
+  else {
+    console.warn("Unsupported color format:", color);
+    return "#000"; // fallback
+  }
+
+  // Chuyển RGB → HSL
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h,
+    s,
+    l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0;
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+
+  // Điều chỉnh để dễ đọc
+  s *= 100;
+  l *= 100;
+  if (l < 50) {
+    l = Math.min(100, l + 40);
+    s = Math.max(20, s - 30);
+  } else {
+    l = Math.max(0, l - 40);
+    s = Math.max(20, s - 30);
+  }
+
+  h = Math.round(h * 360);
+  s = Math.round(s);
+  l = Math.round(l);
+
+  return `hsl(${h}, ${s}%, ${l}%)`;
+}
+
+let contrastColor = "#ffffff";
+let contrastColor2 = "#ffffff";
+function select_color_from_img(url_img) {
+  const img = new Image();
+  img.crossOrigin = "anonymous"; // Quan trọng nếu ảnh từ web khác
+  img.src = url_img;
+
+  img.onload = function () {
+    const canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    let r = 0,
+      g = 0,
+      b = 0,
+      total = 0;
+
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+      total++;
+    }
+
+    r = Math.round(r / total);
+    g = Math.round(g / total);
+    b = Math.round(b / total);
+
+    const rgb = `rgb(${r}, ${g}, ${b})`;
+    const darker = darkenColor_lockscreen(rgb, 100);
+    phone_lock_background = `linear-gradient(to bottom, ${darker}, ${rgb})`;
+
+    // Áp dụng nền
+    lock_preview.style.background = phone_lock_background;
+    phone.style.background = phone_lock_background;
+
+    // 🔁 Tính màu chữ ngược lại (đen hoặc trắng)
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    contrastColor = brightness > 120 ? "#131313" : "#ffffff";
+    contrastColor2 = brightness > 120 ? "#131313" : "#ffffff";
+
+    updateWallpaperBorderColor(getReadableColor(rgb), rgb);
+
+    // Lưu
+    localStorage.setItem("lockscreenColor", phone_lock_background);
+  };
+}
+
+function updateWallpaperBorderColor(color, color_text) {
+  const styleTagId = "wallpaper-style-dynamic";
+  let styleTag = document.getElementById(styleTagId);
+
+  if (!styleTag) {
+    styleTag = document.createElement("style");
+    styleTag.id = styleTagId;
+    document.head.appendChild(styleTag);
+  }
+
+  document.querySelectorAll(".text_lock").forEach((el) => {
+    el.style.color = color_text;
+  });
+  document.querySelectorAll(".text_lock_2").forEach((el) => {
+    el.style.color = color_text;
+  });
+  document.querySelectorAll(".img_lock_svg").forEach((el) => {
+    el.style.fill = color_text;
+  });
+
+  styleTag.textContent = `
+  .wallpaper::before,
+  .wallpaper2::before {
+    content: "";
+    position: absolute;
+    display: flex;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    height: calc(100% - 60px);
+    width: calc(100% - ${wallpaper_border});
+    border: ${wallpaper_border} solid ${color};
+    border-bottom: 60px solid ${color};
+    transition: none;
+  }
+`;
+  localStorage.setItem("wallpaper_border_color", color_text);
 }
 
 function handleBtn1Click() {
   wallpaper_lock_height = 70;
   wallpaper_lock_scale = 80;
-  wallpaper_lock_borderRadius = 20;
+  wallpaper_lock_borderRadius = 15;
   wallpaper_lock_opacity = 1;
   wallpaper_lock_transform = "translateY(250px)";
 
-  document.getElementById("btn1").style.border = "2px solid aqua";
+  document.getElementById("btn1").style.border = "4px solid #f65268";
   document.getElementById("btn1").style.boxShadow =
-    "0 0 10px rgba(0, 255, 255, 0.5)";
-  document.getElementById("btn2").style.border = "2px solid #ffffff";
+    "0 0 10px rgba(246,82,104,0.5)";
+  document.getElementById("btn2").style.border = "4px solid #ffffff";
   document.getElementById("btn2").style.boxShadow = "none";
 
   wallpaper2.style.height = `${wallpaper_lock_height}%`;
@@ -2132,7 +3322,36 @@ function handleBtn1Click() {
     wallpaper_lock_off_transform = wallpaper_lock_transform;
   }
 
+  wallPaper2.classList.remove("hidden_overlay");
+  wallpaper.classList.remove("hidden_overlay");
+
   localStorage.setItem("btn1_2_saved", "1");
+
+  document.getElementById("controls_colorful_photos").classList.add("open");
+
+  if (color_contrastColor) {
+    if (
+      !document
+        .querySelector(".wallpaper2")
+        ?.classList.contains("hidden_overlay")
+    ) {
+      clock_preview.style.color = contrastColor;
+      lockclock.style.color = contrastColor;
+      dateText.style.color = contrastColor;
+      date_preview.style.color = contrastColor;
+      localStorage.setItem("color_lock_saved", contrastColor);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    } else {
+      clock_preview.style.color = contrastColor2;
+      lockclock.style.color = contrastColor2;
+      dateText.style.color = contrastColor2;
+      date_preview.style.color = contrastColor2;
+      localStorage.setItem("color_lock_saved", contrastColor2);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    }
+  }
 }
 
 function handleBtn2Click() {
@@ -2142,10 +3361,10 @@ function handleBtn2Click() {
   wallpaper_lock_opacity = 1;
   wallpaper_lock_transform = "translateY(0px)";
 
-  document.getElementById("btn2").style.border = "2px solid aqua";
+  document.getElementById("btn2").style.border = "4px solid #f65268";
   document.getElementById("btn2").style.boxShadow =
-    "0 0 10px rgba(0, 255, 255, 0.5)";
-  document.getElementById("btn1").style.border = "2px solid #ffffff";
+    "0 0 10px rgba(246,82,104,0.5)";
+  document.getElementById("btn1").style.border = "4px solid #ffffff";
   document.getElementById("btn1").style.boxShadow = "none";
 
   wallpaper2.style.height = `${wallpaper_lock_height}%`;
@@ -2162,7 +3381,155 @@ function handleBtn2Click() {
     wallpaper_lock_off_transform = wallpaper_lock_transform;
   }
 
+  wallPaper2.classList.add("hidden_overlay");
+  wallpaper.classList.add("hidden_overlay");
+
   localStorage.setItem("btn1_2_saved", "0");
+
+  document.getElementById("controls_colorful_photos").classList.remove("open");
+
+  if (color_contrastColor) {
+    if (
+      !document
+        .querySelector(".wallpaper2")
+        ?.classList.contains("hidden_overlay")
+    ) {
+      clock_preview.style.color = contrastColor;
+      lockclock.style.color = contrastColor;
+      dateText.style.color = contrastColor;
+      date_preview.style.color = contrastColor;
+      localStorage.setItem("color_lock_saved", contrastColor);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    } else {
+      clock_preview.style.color = contrastColor2;
+      lockclock.style.color = contrastColor2;
+      dateText.style.color = contrastColor2;
+      date_preview.style.color = contrastColor2;
+      localStorage.setItem("color_lock_saved", contrastColor2);
+      color_contrastColor = true;
+      localStorage.setItem("color_contrastColor_saved", color_contrastColor);
+    }
+  }
+}
+
+let wallpaper_border = "10px"; // mặc định
+
+const styleTag = document.createElement("style");
+document.head.appendChild(styleTag);
+
+document
+  .getElementById("button_style_colotful_photos")
+  .addEventListener("click", (e) => {
+    const target = e.target;
+    if (target.tagName.toLowerCase() === "button") {
+      const size = target.getAttribute("data-border-size");
+      if (size) {
+        wallpaper_border = size + "px"; // Gán border
+
+        // Lưu vào localStorage
+        localStorage.setItem("wallpaper_border", wallpaper_border);
+
+        // Tách màu cuối cùng từ phone_lock_background
+        const matches = phone_lock_background.match(
+          /rgb\((\d+), (\d+), (\d+)\)/g
+        );
+        if (!matches || matches.length === 0) return;
+
+        const lastRGB = matches[matches.length - 1];
+        localStorage.setItem("wallpaper_border_color", lastRGB); // Lưu màu
+
+        updateWallpaperBorderColor(getReadableColor(lastRGB), lastRGB); // Gọi lại hàm
+
+        applyLockscreenLayout(wallpaper_border); // Cập nhật layout
+      }
+    }
+  });
+
+function applyLockscreenLayout(borderSize) {
+  const isZero = borderSize === "0px";
+
+  if (isZero) {
+    document.getElementById("s1_colotful_photos").classList.remove("active");
+    document.getElementById("s2_colotful_photos").classList.add("active");
+  } else {
+    document.getElementById("s1_colotful_photos").classList.add("active");
+    document.getElementById("s2_colotful_photos").classList.remove("active");
+  }
+
+  document.getElementById("text_lock_cus_2").style.bottom = isZero
+    ? "63px"
+    : "17px";
+  document.getElementById("text_lock_cus_2").style.fontSize = isZero
+    ? "34px"
+    : "25px";
+  document.getElementById("text_lock_cus").style.bottom = isZero
+    ? "63px"
+    : "17px";
+  document.getElementById("text_lock_cus").style.fontSize = isZero
+    ? "34px"
+    : "25px";
+
+  document.querySelectorAll(".img_lock_2").forEach((el) => {
+    el.style.left = isZero ? "10px" : "";
+    el.style.right = isZero ? "" : "10px";
+  });
+
+  document.querySelectorAll(".img_lock").forEach((el) => {
+    el.style.left = isZero ? "10px" : "";
+    el.style.right = isZero ? "" : "10px";
+  });
+
+  document.querySelectorAll(".img_lock_svg").forEach((el) => {
+    el.style.width = el.style.height = isZero ? "46px" : "24px";
+  });
+}
+
+function addeventlistener_color_circle2() {
+  document.querySelectorAll(".color-circle2").forEach((el) => {
+    el.addEventListener("click", handle_color_circle2);
+  });
+}
+
+function removeeventlistener_color_circle2() {
+  document.querySelectorAll(".color-circle2").forEach((el) => {
+    el.removeEventListener("click", handle_color_circle2);
+  });
+}
+
+function handle_color_circle2(e) {
+  const el = e.currentTarget;
+  const color = el.getAttribute("data-color");
+  if (color) {
+    updateWallpaperBorderColor(getReadableColor(color), color);
+
+    const color_lockscreen = color;
+    const colorBtn_lockscreen = document.getElementById("color_lockscreen");
+
+    // Convert hex to computed rgb
+    const temp_lockscreen = document.createElement("div");
+    temp_lockscreen.style.color = color_lockscreen;
+    document.body.appendChild(temp_lockscreen);
+    const computedColor_lockscreen = getComputedStyle(temp_lockscreen).color;
+    document.body.removeChild(temp_lockscreen);
+
+    const darkerColor_lockscreen = darkenColor_lockscreen(
+      computedColor_lockscreen,
+      100
+    );
+
+    phone_lock_background = `linear-gradient(to bottom, ${darkerColor_lockscreen}, ${computedColor_lockscreen})`;
+
+    lock_preview.style.background = phone_lock_background;
+    phone.style.background = phone_lock_background;
+    localStorage.setItem("lockscreenColor", phone_lock_background);
+  } else {
+    const wallpaperEl = document.querySelector(".wallpaper2");
+    const bg = window.getComputedStyle(wallpaperEl).backgroundImage;
+    const match = bg.match(/url\(["']?(.*?)["']?\)/);
+    const imageUrl = match ? match[1] : null;
+    select_color_from_img(imageUrl);
+  }
 }
 
 target.innerText += "15";
@@ -2279,7 +3646,7 @@ function set_dark_mode(mode) {
     app4_vesion.style.background = "#010101";
     app4animation.style.background = "#010101";
     app4main.style.background = "#010101";
-    app4_language.style.background = "#010101";
+    app4audio.style.background = "#010101";
     app4_icon.style.background = "#010101";
     aod_option.style.background = "#010101";
     wallpaper_option.style.background = "#010101";
@@ -2292,6 +3659,16 @@ function set_dark_mode(mode) {
     }
 
     document.querySelectorAll(".setting-item").forEach((el) => {
+      el.style.color = "#ffffff";
+      el.style.background = "#171719";
+    });
+
+    document.querySelectorAll(".setting-item_volume").forEach((el) => {
+      el.style.color = "#ffffff";
+      el.style.background = "#171719";
+    });
+
+    document.querySelectorAll(".volume-setting_volume").forEach((el) => {
       el.style.color = "#ffffff";
       el.style.background = "#171719";
     });
@@ -2361,14 +3738,26 @@ function set_dark_mode(mode) {
       el.style.color = "#ffffff";
     });
 
-    document.querySelector(".add-button").style.background = "#171719";
+    document.querySelectorAll(".popup_wallpaper").forEach((el) => {
+      el.style.background = "#141414ff";
+      el.style.color = "#ffffff";
+    });
+    document.querySelectorAll(".popup_wallpaper_button").forEach((el) => {
+      el.style.background = "#222222ff";
+      el.style.color = "#ffffff";
+    });
+
+    document.querySelector(".add-button").style.background = "#393939";
     document.querySelector(".add-button").style.color = "#eaeaea";
-    document.querySelector(".controls").style.background =
-      "rgba(0, 0, 0, 0.85)";
-    document.getElementById("btn1").style.background = "#171719";
-    document.getElementById("btn2").style.background = "#171719";
-    document.getElementById("btn1").style.color = "#ffffff";
-    document.getElementById("btn2").style.color = "#ffffff";
+    document.querySelectorAll(".controls").forEach((el) => {
+      el.style.background = "#000000";
+    });
+    document.querySelectorAll(".option").forEach((el) => {
+      el.style.background = "#171719";
+    });
+    document.querySelectorAll(".lottie-box").forEach((el) => {
+      el.style.background = "#171719";
+    });
 
     app4.style.color = "#eaeaea";
     app4_finger.style.color = "#eaeaea";
@@ -2377,19 +3766,21 @@ function set_dark_mode(mode) {
     app4_vesion.style.color = "#eaeaea";
     app4animation.style.color = "#eaeaea";
     app4main.style.color = "#eaeaea";
-    app4_language.style.color = "#eaeaea";
+    app4audio.style.color = "#eaeaea";
     app4_icon.style.color = "#eaeaea";
+    app4wallpaper.style.color = "#eaeaea";
     document.getElementById("app4credits").style.color = "#eaeaea";
 
     aod_option.style.color = "#eaeaea";
-    wallpaper_option.style.color = "#eaeaea";
+    wallpaper_option.style.color = "##d9d9d9ea";
     app4_lock_style.style.color = "#eaeaea";
 
     document.querySelectorAll(".button-finger").forEach((el) => {
       el.style.background = "#171719";
       el.style.color = "#ffffff";
     });
-
+    document.querySelector(".input-group_text_less_is_more").style.background =
+      "#171719";
     document.querySelector(".khaysetting1-2").style.background = "#171719";
     document.querySelector(".khaysetting3").style.background = "#171719";
     document.querySelector(".khaysetting5").style.background = "#171719";
@@ -2418,7 +3809,7 @@ function set_dark_mode(mode) {
     app4_vesion.style.background = "#eaeaea";
     app4animation.style.background = "#eaeaea";
     app4main.style.background = "#eaeaea";
-    app4language.style.background = "#eaeaea";
+    app4audio.style.background = "#eaeaea";
     app4_icon.style.background = "#eaeaea";
     wallpaper_option.style.background = "#eaeaea";
     aod_option.style.background = "#eaeaea";
@@ -2431,6 +3822,16 @@ function set_dark_mode(mode) {
     }
 
     document.querySelectorAll(".setting-item").forEach((el) => {
+      el.style.background = "#ffffff";
+      el.style.color = "#000000";
+    });
+
+    document.querySelectorAll(".setting-item_volume").forEach((el) => {
+      el.style.background = "#ffffff";
+      el.style.color = "#000000";
+    });
+
+    document.querySelectorAll(".volume-setting_volume").forEach((el) => {
       el.style.background = "#ffffff";
       el.style.color = "#000000";
     });
@@ -2512,6 +3913,15 @@ function set_dark_mode(mode) {
       el.style.background = "#ffffff";
     });
 
+    document.querySelectorAll(".popup_wallpaper").forEach((el) => {
+      el.style.background = "#eee";
+      el.style.color = "#171719";
+    });
+    document.querySelectorAll(".popup_wallpaper_button").forEach((el) => {
+      el.style.background = "#ffffff";
+      el.style.color = "#171719";
+    });
+
     app4.style.color = "#010101";
     app4_finger.style.color = "#010101";
     app4_home.style.color = "#010101";
@@ -2519,7 +3929,7 @@ function set_dark_mode(mode) {
     app4_vesion.style.color = "#010101";
     app4animation.style.color = "#010101";
     app4main.style.color = "#010101";
-    app4language.style.color = "#010101";
+    app4audio.style.color = "#010101";
     app4_icon.style.color = "#010101";
     wallpaper_option.style.color = "#010101";
     aod_option.style.color = "#010101";
@@ -2532,13 +3942,18 @@ function set_dark_mode(mode) {
 
     document.querySelector(".add-button").style.background = "#ffffff";
     document.querySelector(".add-button").style.color = "#000000";
-    document.querySelector(".controls").style.background =
-      "rgba(255, 255, 255, 0.85)";
-    document.getElementById("btn1").style.background = "#ffffff";
-    document.getElementById("btn2").style.background = "#ffffff";
-    document.getElementById("btn1").style.color = "#000000";
-    document.getElementById("btn2").style.color = "#000000";
+    document.querySelectorAll(".controls").forEach((el) => {
+      el.style.background = "#eaeaea";
+    });
+    document.querySelectorAll(".option").forEach((el) => {
+      el.style.background = "#ffffff";
+    });
+    document.querySelectorAll(".lottie-box").forEach((el) => {
+      el.style.background = "#ffffff";
+    });
 
+    document.querySelector(".input-group_text_less_is_more").style.background =
+      "#ffffff";
     document.querySelector(".khaysetting1-2").style.background = "#ffffff";
     document.querySelector(".khaysetting3").style.background = "#ffffff";
     document.querySelector(".khaysetting5").style.background = "#ffffff";
@@ -2552,12 +3967,16 @@ function showFingerPopup() {
 
   btnWhite.addEventListener("click", handleBtnWhiteClick);
   btnBlue.addEventListener("click", handleBtnBlueClick);
+
+  addLottiePreviewEvents();
 }
 function hideFingerPopup() {
   hidePopup_open_close(app4_finger);
 
   btnWhite.removeEventListener("click", handleBtnWhiteClick);
   btnBlue.removeEventListener("click", handleBtnBlueClick);
+
+  removeLottiePreviewEvents();
 }
 
 const fingerprint_preview = document.getElementById("fingerprint_preview");
@@ -2566,15 +3985,15 @@ const btnBlue = document.getElementById("btn-blue");
 
 fingerprint_preview.style.filter = "brightness(1000%) grayscale(100%)";
 fingerprint.style.filter = "brightness(1000%) grayscale(100%)";
-btnWhite.style.border = "2px solid aqua";
+btnWhite.style.border = "4px solid #f65268";
 
 function handleBtnWhiteClick() {
   fingerprint_preview.style.filter = "brightness(1000%) grayscale(100%)";
   fingerprint.style.filter = "brightness(1000%) grayscale(100%)";
   btnWhite.classList.add("active");
   btnBlue.classList.remove("active");
-  btnBlue.style.border = "2px solid rgb(225, 225, 225)";
-  btnWhite.style.border = "2px solid aqua";
+  btnBlue.style.border = "4px solid rgb(225, 225, 225)";
+  btnWhite.style.border = "4px solid #f65268";
   footerText.style.color = "rgb(255, 255, 255)";
   localStorage.setItem("btn_finger_saved", "btnWhite");
 }
@@ -2584,11 +4003,70 @@ function handleBtnBlueClick() {
     "brightness(0) saturate(100%) invert(72%) sepia(35%) saturate(1172%) hue-rotate(174deg) brightness(104%) contrast(104%)";
   fingerprint.style.filter =
     "brightness(0) saturate(100%) invert(72%) sepia(35%) saturate(1172%) hue-rotate(174deg) brightness(104%) contrast(104%)";
-  btnWhite.style.border = "2px solid rgb(225, 225, 225)";
-  btnBlue.style.border = "2px solid aqua";
+  btnWhite.style.border = "4px solid rgb(225, 225, 225)";
+  btnBlue.style.border = "4px solid #f65268";
   footerText.style.color = "#6cd0ff";
   localStorage.setItem("btn_finger_saved", "btnBlue");
 }
+
+let lottieBoxes = [];
+
+// Hàm đổi animation chính (không autoplay)
+function changeLottieAnimation(newPath, newSpeed = 1) {
+  if (animation) animation.destroy(); // Xóa animation cũ
+
+  animation = lottie.loadAnimation({
+    container: document.getElementById("lottie"),
+    renderer: "svg",
+    loop: false,
+    autoplay: false,
+    path: newPath,
+  });
+
+  animation.setSpeed(newSpeed);
+
+  // ✅ Lưu vào localStorage
+  localStorage.setItem("selectedLottiePath", newPath);
+  localStorage.setItem("selectedLottieSpeed", newSpeed);
+
+  animation.addEventListener("DOMLoaded", () => {
+    animation.goToAndStop(animation.totalFrames, true); // Dừng tại frame cuối
+  });
+}
+
+function addLottiePreviewEvents() {
+  const lottieBoxes = Array.from(document.querySelectorAll(".lottie-box"));
+
+  lottieBoxes.forEach((box) => {
+    const player = box.querySelector("lottie-player");
+    const speed = parseFloat(box.getAttribute("data-speed")) || 1;
+
+    player.setAttribute("loop", "true");
+
+    const onReady = () => {
+      player.setSpeed(speed);
+      player.play();
+    };
+
+    if (player.shadowRoot?.querySelector("svg")) {
+      onReady();
+    } else {
+      player.addEventListener("ready", onReady, { once: true });
+    }
+
+    box.addEventListener(
+      "click",
+      (box._clickHandler = () => {
+        lottieBoxes.forEach((b) => b.classList.remove("active"));
+        box.classList.add("active");
+        const path = box.getAttribute("data-path");
+        changeLottieAnimation(path, speed); // 👈 truyền path và speed vào
+      })
+    );
+  });
+}
+
+// Tự động khởi động khi trang sẵn sàng
 
 function showIconPopup() {
   showPopup_open_close(app4_icon);
@@ -2671,7 +4149,7 @@ function icon_hyperos() {
   root.style.setProperty("--bg-border_radius", slider.value + "px");
 }
 
-function icon_ios() {
+function icon_ios(e) {
   localStorage.setItem("selected_icon_pack", "ios");
   updateIconBorder("ios_icon");
   document.documentElement.style.setProperty("--bg-size_img", "115%");
@@ -2780,10 +4258,10 @@ function icon_oneui() {
 // -- Shared helper to update border --
 function updateIconBorder(activeId) {
   document.querySelectorAll(".box_icon").forEach((el) => {
-    el.style.border = "2px solid gray";
+    el.style.border = "4px solid gray";
   });
   const active = document.getElementById(activeId);
-  if (active) active.style.border = "2px solid aqua";
+  if (active) active.style.border = "4px solid #f65268";
 }
 
 let pack = localStorage.getItem("selected_icon_pack");
@@ -2833,7 +4311,9 @@ function setIconAndBackgroundGradient2(boxSelector, imageUrl) {
     canvas.width = w;
     canvas.height = h;
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const ctx = canvas.getContext("2d", {
+      willReadFrequently: true,
+    });
     ctx.drawImage(img, 0, 0);
 
     const middleY = Math.floor(h / 2);
@@ -2873,7 +4353,9 @@ function setIconAndBackgroundGradient(boxSelector, imageUrl) {
     canvas.width = w;
     canvas.height = h;
 
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const ctx = canvas.getContext("2d", {
+      willReadFrequently: true,
+    });
     ctx.drawImage(img, 0, 0);
 
     const centerX = Math.floor(w / 2);
@@ -2920,6 +4402,7 @@ function removeAllUIEventListeners() {
   back9.removeEventListener("click", hideFingerPopup);
 
   remove_pass_events();
+  removeEventListeners_aod_preview();
 }
 
 // -- nofication --
@@ -2936,22 +4419,22 @@ let deltaYS = 0;
 let deltaXS = 0;
 
 function updateTransformS(y) {
-  const y2 = y;
+  let y2 = y;
   if (y2 < -90) y2 = -90;
   if (y2 > 0) y2 = 0;
   //if (y < -50) y = -50;
   if (y > 0) y = 0;
 
-  const scale = 1 + -y / 60;
+  const scale = 1 + -y2 / 60;
 
   clock.style.transition = "all 0.2s";
-  clock.style.transform = `translateX(calc(${-y}px / 3)) translateY(${-y2}px) scale(${scale})`;
+  clock.style.transform = `translateX(calc(${-y2}px / 3)) translateY(${-y2}px) scale(${scale})`;
   lp2.style.transition = "all 0.1s";
   lp2.style.opacity = `${scale - 1} `;
   lp2.style.zIndex = 19999;
 
   thanhS1.style.transition = "none";
-  thanhS1.style.transform = `translateX(50%) translateY(${-y}px)`;
+  thanhS1.style.transform = `translateY(${-y2}px)`;
 }
 
 thanhS1.addEventListener("touchstart", (e) => {
@@ -2983,7 +4466,7 @@ thanhS1.addEventListener("touchend", () => {
   else dongnotification();
   deltaYS = 0;
   deltaXS = 0;
-  thanhS1.style.transform = `translateX(50%)`;
+  thanhS1.style.transform = ``;
 });
 
 thanhS1.addEventListener("mousedown", (e) => {
@@ -3017,7 +4500,7 @@ window.addEventListener("mouseup", () => {
   else dongnotification();
   deltaYS = 0;
   deltaXS = 0;
-  thanhS1.style.transform = `translateX(50%)`;
+  thanhS1.style.transform = ``;
 });
 
 lp2.addEventListener("pointerup", () => {
@@ -3103,14 +4586,14 @@ speedBoxes.forEach((box) => {
   });
 });
 
-const animation = lottie.loadAnimation({
+let animation = lottie.loadAnimation({
   container: document.getElementById("lottie"),
   renderer: "svg",
   loop: false,
   autoplay: false,
-  path: "originos_data/Artboard_1.json",
+  path: "originos_data/1m8zg1YIac.json",
 });
-animation.setSpeed(0.4 * currentSpeed);
+animation.setSpeed(2 * currentSpeed);
 animation.goToAndStop(animation.totalFrames - 1, true);
 
 const finger_print = lottie.loadAnimation({
@@ -3132,12 +4615,14 @@ const battery_num = document.querySelector(".battery-num");
 function updateBatteryInfo(battery) {
   battery_level = Math.round(battery.level * 100);
   charging = battery.charging;
-  battery4.style.width = `calc(${battery_level}% / 1.25)`;
+  battery4.style.width = `calc(${battery_level}%)`;
   if (battery_level <= 20) battery4.style.background = "red";
+  if (battery_level == 20) playmusic("originos_data/ui/LowBattery.ogg");
   if (battery_level > 20) battery4.style.background = "white";
   battery_num.textContent = `${battery_level}`;
   if (charging) {
     battery4.style.background = "#26bd44";
+    playmusic("originos_data/ui/charge_full.ogg", volume_charge_volume);
   }
 }
 
@@ -3150,4 +4635,57 @@ if ("getBattery" in navigator) {
       updateBatteryInfo(battery)
     );
   });
+}
+
+const row = document.querySelector(".button-row");
+const items = row.querySelectorAll(".img-button");
+
+function updateRotation() {
+  const rowRect = row.getBoundingClientRect();
+  const centerX = rowRect.left + rowRect.width / 2;
+
+  items.forEach((item) => {
+    const rect = item.getBoundingClientRect();
+    const itemCenter = rect.left + rect.width / 2;
+    const distance = itemCenter - centerX;
+
+    const maxAngle = 80; // càng lớn xoay càng mạnh
+    const maxDistance = rowRect.width / 1.3;
+    const ratio = Math.max(-1, Math.min(1, distance / maxDistance));
+    const angle = ratio * maxAngle;
+
+    const scale = 1 - Math.abs(ratio) * 0.5;
+    const z = Math.round((1 - Math.abs(ratio)) * 100);
+
+    item.style.transform = `
+    rotateY(${-angle}deg)
+    scale(${scale})
+    translateX(${-ratio * 80}px)`;
+    item.style.zIndex = z;
+  });
+}
+
+row.addEventListener("scroll", updateRotation);
+window.addEventListener("load", updateRotation);
+window.addEventListener("resize", updateRotation);
+
+function removeWithFade(elementOrId, duration = 500) {
+  // Nếu là chuỗi (id), chuyển thành element
+  let element =
+    typeof elementOrId === "string"
+      ? document.getElementById(elementOrId)
+      : elementOrId;
+
+  if (!element) return;
+
+  // Thêm transition nếu chưa có
+  element.style.transition = `opacity ${duration}ms ease`;
+  element.style.opacity = "0";
+
+  // Xóa khỏi DOM sau khi hoàn tất animation
+  setTimeout(() => {
+    if (element && element.parentNode) {
+      element.remove();
+    }
+  }, duration);
 }

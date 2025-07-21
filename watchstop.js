@@ -37,7 +37,7 @@ mainBtn_clock.addEventListener("click", () => {
   elapsedBeforePause_clock = 0;
   startStopBtn_clock.textContent = "Stop";
   startStopBtn_clock.style.pointerEvents = "auto";
-  document.getElementById("toggleBtn").textContent = "pause";
+  document.getElementById("toggleBtn").innerHTML = getIconSVG("pause");
   updateActionsMap();
 });
 
@@ -55,13 +55,13 @@ function stop_start_clock() {
     elapsedBeforePause_clock += Date.now() - startTime_clock;
     isRunning_clock = false;
     startStopBtn_clock.textContent = "Start";
-    document.getElementById("toggleBtn").textContent = "play_arrow";
+    document.getElementById("toggleBtn").innerHTML = getIconSVG("play_arrow");
   } else {
     startTime_clock = Date.now();
     interval_clock = setInterval(updateTime_clock, 10);
     isRunning_clock = true;
     startStopBtn_clock.textContent = "Stop";
-    document.getElementById("toggleBtn").textContent = "pause";
+    document.getElementById("toggleBtn").innerHTML = getIconSVG("pause");
   }
   updateActionsMap();
 }
@@ -76,6 +76,16 @@ function reset_clock() {
   display_island.textContent = "00:00";
   startStopBtn_clock.textContent = "Stop";
   app_clock.classList.remove("show-split_clock");
-  document.getElementById("toggleBtn").textContent = "play_arrow";
+  document.getElementById("toggleBtn").innerHTML = getIconSVG("play_arrow");
+
   updateActionsMap();
+}
+
+function getIconSVG(name) {
+  if (name === "pause") {
+    return `<svg xmlns="http://www.w3.org/2000/svg" height="60" width="60" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+  } else if (name === "play_arrow") {
+    return `<svg xmlns="http://www.w3.org/2000/svg" height="60" width="60" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+  }
+  return "";
 }

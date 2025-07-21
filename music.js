@@ -93,8 +93,10 @@ function playTrack_music(index) {
 
   audioPlayer_music.src = track.src;
   audioPlayer_music.play();
-  playPauseIcon_music.textContent = "pause";
-  playPauseIcon_music2.textContent = "pause";
+  playPauseIcon_music.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="gray"><path d="M556.67-200v-560h170v560h-170Zm-323.34 0v-560h170v560h-170Z"/></svg>`;
+  playPauseIcon_music2.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="M556.67-200v-560h170v560h-170Zm-323.34 0v-560h170v560h-170Z"/></svg>`;
   popup_music.style.display = "flex";
   showPopup_open_close(playerPopup_music);
   playlist_music.style.height = "28vh";
@@ -107,13 +109,20 @@ function playTrack_music(index) {
 function togglePlay_music() {
   if (audioPlayer_music.paused) {
     audioPlayer_music.play();
-    playPauseIcon_music.textContent = "pause";
-    playPauseIcon_music2.textContent = "pause";
+    playPauseIcon_music.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="gray"><path d="M548.22-174v-612h214v612h-214Zm-350.44 0v-612h214v612h-214Z"/></svg>
+`;
+    playPauseIcon_music2.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="M548.22-174v-612h214v612h-214Zm-350.44 0v-612h214v612h-214Z"/></svg>
+`;
+
     isPlaying_music = true;
   } else {
     audioPlayer_music.pause();
-    playPauseIcon_music.textContent = "play_arrow";
-    playPauseIcon_music2.textContent = "play_arrow";
+    playPauseIcon_music.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="gray"><path d="M320-200v-560l440 280-440 280Z"/></svg>`;
+    playPauseIcon_music2.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#fff"><path d="M320-200v-560l440 280-440 280Z"/></svg>`;
     isPlaying_music = false;
   }
   updateActionsMap();
@@ -152,7 +161,8 @@ function closePlayer_music() {
   audioPlayer_music.currentTime = 0;
   hidePopup_open_close(playerPopup_music);
   playlist_music.style.height = "60vh";
-  playPauseIcon_music.textContent = "play_arrow";
+  playPauseIcon_music.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="gray"><path d="M320-200v-560l440 280-440 280Z"/></svg>`;
   isPlaying_music = false;
   updateActionsMap();
 }
@@ -214,3 +224,30 @@ document
 
 // Khởi tạo giao diện ban đầu
 updatePlaylist_music();
+
+function playmusic(url, volume = 1.0) {
+  if (volume == 0) return; // không phát nếu âm lượng bằng 0
+
+  const container = document.createElement("div");
+  container.style.display = "none";
+
+  const audio = document.createElement("audio");
+  audio.src = url;
+  audio.loop = false;
+  audio.autoplay = true;
+  audio.volume = Math.min(volume, 1);
+
+  const cleanup = () => {
+    audio.removeEventListener("ended", cleanup);
+    container.remove();
+  };
+
+  audio.addEventListener("ended", cleanup);
+
+  container.appendChild(audio);
+  document.body.appendChild(container);
+}
+
+window.addEventListener("click", () => {
+  playmusic("originos_data/ui/Effect_Tick.ogg", volume_click_volume);
+});

@@ -14,13 +14,13 @@ const translations = {
     forgot: "Forgot password",
   },
   vi: {
-    create_new: "Tạo mật mã mới",
-    enter_old: "Nhập mật mã cũ",
-    confirm_new: "Xác nhận lại mật mã mới",
-    wrong_old: "Mật mã cũ sai",
-    not_match: "Mật mã xác nhận không khớp",
-    remove_success: "Đã xóa mật khẩu thành công",
-    forgot: "Quên mật mã",
+    create_new: "Create new password",
+    enter_old: "Enter old password",
+    confirm_new: "Confirm new password",
+    wrong_old: "Incorrect old password",
+    not_match: "Passwords do not match",
+    remove_success: "Password removed successfully",
+    forgot: "Forgot password",
   },
   // ... Thêm ngôn ngữ khác
 };
@@ -104,6 +104,7 @@ del_password.addEventListener("click", () => {
     lock_content.style.opacity = `1`;
     swipeHandle.style.opacity = "1";
     // THOÁT GIAO DIỆN NẾU CHƯA NHẬP GÌ
+    show_pass_for_cuslock = false;
     container_password.style.animation = "fadeOut_password 0.3s ease-out";
     container_password.addEventListener("animationend", function handler() {
       container_password.style.display = "none";
@@ -128,14 +129,56 @@ function addNumber_password(num) {
     if (input_password === pass_password) {
       failCount_password = 0; // reset khi đúng
       fogot_pass_btn.style.display = "none";
-      setTimeout(() => {
-        input_password = "";
-        updateDots_password();
-        unlock(); // mở khóa
-      }, 100);
-      setTimeout(() => {
-        message_password.textContent = "";
-      }, 2000);
+      if (show_pass_for_cuslock) {
+        currentOpeningBtn = boxes["box4"];
+        app = appopen[`box4`];
+        app.style.display = "none";
+        hideAllClickables();
+        handleShowLockOption_noanim();
+        showPopup_open_close_noanim("app4theme");
+        id_holding_locksreen = null;
+        lock_preview.style.transform = "translateX(-50%) scale(1)";
+        unlock_noanim();
+        openPopupFromCurrentButton_noanim();
+        updateTime2();
+
+        id_holding_locksreen2 = setTimeout(() => {
+          lock_preview.style.transform = "translateX(-50%) scale(0.7)";
+
+          AboutInSetting.style.pointerEvents = "none";
+          animationInSetting.style.pointerEvents = "none";
+
+          lockscreen.style.transform = "translateX(-50%) scale(1)";
+          id_holding_locksreen2 = null;
+          is_holding_locksreen = false;
+          show_pass_for_cuslock = false;
+
+          wallpaper_btn.addEventListener("click", handleOpenWallpaperPopup);
+          wallpaper_btn2.addEventListener("click", handleOpenWallpaperPopup);
+          back4.addEventListener("click", handleCloseWallpaperPopup);
+
+          aod_btn.addEventListener("click", handleOpenAODOption);
+          back5.addEventListener("click", handleCloseAODOption);
+
+          lock_btn.addEventListener("click", handleShowLockOption);
+          back6.addEventListener("click", handleHideLockOption);
+
+          home_btn.addEventListener("click", showHomeApp);
+          back8.addEventListener("click", hideHomeApp);
+
+          finger.addEventListener("click", showFingerPopup);
+          back9.addEventListener("click", hideFingerPopup);
+
+          removeCustomLockscreenTime(); // để tắt
+          addEventListeners_aod_preview();
+        }, 100);
+      } else {
+        setTimeout(() => {
+          input_password = "";
+          updateDots_password();
+          unlock(); // mở khóa
+        }, 100);
+      }
     } else {
       failCount_password++;
       dotsBox_password.classList.remove("shake_password");

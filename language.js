@@ -37,10 +37,9 @@ function en_language() {
   back.textContent = "About";
   back2.textContent = "Animation";
   back3.textContent = "Theme";
-  back4.textContent = document.getElementById("wallpaper_btn_2").textContent =
-    "Wallpaper";
+  back4.textContent = "Wallpaper";
   back5.textContent = "Always On Display";
-  back6.textContent = "Save";
+  back6.textContent = "Back";
   back7.textContent = "Credits";
   back8.textContent = "Home Screen";
   back9.textContent = "Fingerprint";
@@ -57,15 +56,11 @@ function en_language() {
   document.getElementById("setting_title_hide_wallpaper").textContent =
     "Hide Wallpaper";
 
-  document.getElementById("AOD_name").textContent = "AOD";
   document.getElementById("wallpaper_name").textContent = "Wallpaper";
   document.getElementById("lock_screen_name").textContent = "Lock Screen";
   document.getElementById("finger_print_name").textContent = "Finger Print";
   document.getElementById("home_screen_name").textContent = "Home Screen";
 
-  document.getElementById("btn1").textContent = "Style 1";
-  document.getElementById("btn2").textContent = "Style 2";
-  document.getElementById("Font_color").textContent = "Font Color";
   document.getElementById("Font_size").textContent = "Font Size";
 
   document.getElementById("btn-white").textContent = "White";
@@ -109,7 +104,7 @@ function vi_language() {
   back4.textContent = document.getElementById("wallpaper_btn_2").textContent =
     "Hình nền";
   back5.textContent = "Always on display";
-  back6.textContent = "Lưu";
+  back6.textContent = "Thoát";
   back7.textContent = "Credits";
   back8.textContent = "Màn hình chính";
   back9.textContent = "Vân tay";
@@ -677,7 +672,7 @@ function ph_language() {
   back4.textContent = document.getElementById("wallpaper_btn_2").textContent =
     "Wallpaper"; // Gốc: walpaper - Đã sửa "walpaper" thành "Wallpaper"
   back5.textContent = "Always on Display"; // Gốc: Always on display - Đã sửa thành cách viết hoa phù hợp
-  back6.textContent = "Save";
+  back6.textContent = "Back";
   back7.textContent = "Kredito"; // Gốc: Credits - Dịch sang "Kredito" (Credit)
   back8.textContent = "Home Screen"; // Gốc: Home screen - Đã sửa thành cách viết hoa phù hợp
   back9.textContent = "Fingerprint"; // Gốc: Finger print - Đã sửa "finger print" thành "Fingerprint"
