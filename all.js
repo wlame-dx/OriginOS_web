@@ -300,7 +300,7 @@ function updateTransform(y, x) {
   if (displayY > 100) displayY = 100;
   const scale = 1.1628 - y / 250;
 
-  currentOpeningBtn.style.transition = `all 0.02s`;
+  currentOpeningBtn.style.transition = `all 0.08s`;
   currentOpeningBtn.style.transform = `translateX(${x}px) translateY(${-displayY}px) scale(${scale})`;
 
   thanh.style.transition = "none";
