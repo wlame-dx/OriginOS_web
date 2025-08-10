@@ -1,7 +1,7 @@
 const dev_name = document.getElementById("name_dev");
 if (
   !dev_name ||
-  dev_name.textContent.trim() != "TikTok: @sungsamtech - galaxyA15"
+  dev_name.textContent.trim() != "TikTok: @wlamefleet"
 ) {
   localStorage.clear();
   sessionStorage.clear();
